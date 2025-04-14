@@ -10,6 +10,7 @@ import LandingPage from './pages/Landing/LandingPage';
 import AudioMatch from './pages/Landing/AudioMatch';
 
 
+
 const hiddenOnRoutes = [
   '/',
   '/signup',
