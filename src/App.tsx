@@ -8,6 +8,8 @@ import DefaultLayout from './layout/DefaultLayout';
 import SignUp from './pages/Authentication/SignUp';
 import LandingPage from './pages/Landing/LandingPage';
 import AudioMatch from './pages/Landing/AudioMatch';
+import MusicRoyaltiesDashboard from './pages/ArtistDashboard';
+import MusicRoyaltiesPayments from './pages/MusicRoyaltiesPayments';
 
 
 
@@ -15,7 +17,9 @@ const hiddenOnRoutes = [
   '/',
   '/signup',
   '/verify-user',
-  "/audio-match"
+  "/audio-match",
+  "/artist-dashboard",
+  "/artist-payments",
 
 ];
 
@@ -65,6 +69,25 @@ function App() {
             <>
               <PageTitle title="Sign Up | Restore Water Africa" />
               <AudioMatch />
+            </>
+          }
+        />
+        <Route
+          path="/artist-dashboard"
+          element={
+            <>
+              <PageTitle title="Artist Dasboard | Restore Water Africa" />
+              <MusicRoyaltiesDashboard />
+            </>
+          }
+        />
+
+        <Route
+          path="/artist-payments"
+          element={
+            <>
+              <PageTitle title="Artist Payments | Restore Water Africa" />
+              <MusicRoyaltiesPayments />
             </>
           }
         />
