@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-
+import Header from '../components/Header/index';
+import Sidebar from '../components/Sidebar';
 
 interface DefaultLayoutProps {
   children: ReactNode;
@@ -21,13 +22,21 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children, hiddenOnRoutes 
   });
 
   return (
-    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+    <div className=" dark:bg-boxdark-2 dark:text-bodydark ">
       <div className="flex h-screen overflow-hidden">
+        {/* Conditionally render Sidebar */}
+        {!hideSidebarAndHeader && (
+          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        )}
 
-        <div className="relative flex flex-1 flex-col overflow-y px-7 overflow-x-hidden">
-       
+        <div className="relative flex flex-1 flex-col overflow-y overflow-x-hidden">
+          {/* Conditionally render Header */}
+          {!hideSidebarAndHeader && (
+            <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          )}
+
           <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <div className="mx-auto max-w-screen-2xl p-3 md:p-4 2xl:p-5">
               {children}
             </div>
           </main>

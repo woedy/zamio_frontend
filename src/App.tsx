@@ -6,21 +6,18 @@ import PageTitle from './components/PageTitle';
 
 import DefaultLayout from './layout/DefaultLayout';
 import SignUp from './pages/Authentication/SignUp';
-import LandingPage from './pages/Landing/LandingPage';
-import AudioMatch from './pages/Landing/AudioMatch';
+import LandingPage from './pages/Project/LandingPage';
+import AudioMatch from './pages/Project/AudioMatch';
 import MusicRoyaltiesDashboard from './pages/ArtistDashboard';
 import MusicRoyaltiesPayments from './pages/MusicRoyaltiesPayments';
-
-
+import ZamIOLandingPage from './pages/Landing/LandingPage';
 
 const hiddenOnRoutes = [
   '/',
   '/signup',
   '/verify-user',
-  "/audio-match",
-  "/artist-dashboard",
-  "/artist-payments",
-
+  '/audio-match',
+  
 ];
 
 function App() {
@@ -43,22 +40,38 @@ function App() {
   ) : shouldUseDefaultLayout ? (
     <DefaultLayout hiddenOnRoutes={hiddenOnRoutes}>
       <Routes>
- 
-     
-    
+
+      <Route
+          path="/dashboard"
+          element={
+            <>
+              <PageTitle title="Artist Dasboard | ZamIO" />
+              <MusicRoyaltiesDashboard />
+            </>
+          }
+        />
+
+<Route
+          path="/royalty-payments"
+          element={
+            <>
+              <PageTitle title="Artist Payments | ZamIO" />
+              <MusicRoyaltiesPayments />
+            </>
+          }
+        />
+
       </Routes>
     </DefaultLayout>
   ) : (
     <>
       <Routes>
-   
-
         <Route
           index
           element={
             <>
-              <PageTitle title="Home | Restore Water Africa" />
-              <LandingPage />
+              <PageTitle title="Home | ZamIO" />
+              <ZamIOLandingPage />
             </>
           }
         />
@@ -67,39 +80,12 @@ function App() {
           path="/audio-match"
           element={
             <>
-              <PageTitle title="Sign Up | Restore Water Africa" />
+              <PageTitle title="Sign Up | ZamIO" />
               <AudioMatch />
             </>
           }
         />
-        <Route
-          path="/artist-dashboard"
-          element={
-            <>
-              <PageTitle title="Artist Dasboard | Restore Water Africa" />
-              <MusicRoyaltiesDashboard />
-            </>
-          }
-        />
-
-        <Route
-          path="/artist-payments"
-          element={
-            <>
-              <PageTitle title="Artist Payments | Restore Water Africa" />
-              <MusicRoyaltiesPayments />
-            </>
-          }
-        />
-
-
-
-   
-
-
-   
-
-  
+       
 
 
       </Routes>

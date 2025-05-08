@@ -14,76 +14,13 @@ export default function MusicRoyaltiesPayments() {
     { id: "PAY-ER453R-TR", period: "Apr 05 - May 05", amount: "Ghc 3,500", duration: "1hr 34min", status: "Paid", report: "Download PDF" }
   ];
 
-  const navigationItems = [
-    { name: "Dashboard", icon: <Settings className="w-5 h-5" /> },
-    { name: "Play History", icon: <Clock className="w-5 h-5" /> },
-    { name: "Upload/Management", icon: <Upload className="w-5 h-5" /> },
-    { name: "Payments", icon: <CreditCard className="w-5 h-5" /> },
-    { name: "Notifications", icon: <Bell className="w-5 h-5" /> },
-    { name: "Help and Support", icon: <HelpCircle className="w-5 h-5" /> },
-    { name: "Feedback/Reviews", icon: <MessageSquare className="w-5 h-5" /> },
-    { name: "Profile", icon: <User className="w-5 h-5" /> },
-    { name: "Settings", icon: <Settings className="w-5 h-5" /> },
-  ];
+ 
 
   return (
-    <div className="flex min-h-screen bg-primary text-white">
-      {/* Sidebar */}
-      <div className="w-64 border-r border-indigo-900 flex flex-col">
-        <div className="p-6 mb-6">
-          <h1 className="text-3xl font-bold">ZamIO</h1>
-        </div>
-        <nav className="flex-1">
-          <ul>
-            {navigationItems.map((item) => (
-              <li key={item.name}>
-                <button
-                  className={`flex items-center w-full px-6 py-3 hover:bg-indigo-900 transition-colors ${
-                    activeTab === item.name ? "bg-indigo-900 font-semibold" : ""
-                  }`}
-                  onClick={() => setActiveTab(item.name)}
-                >
-                  <span className="mr-3">{item.icon}</span>
-                  <span>{item.name}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
+   
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Top Bar */}
-        <header className="flex items-center justify-between p-6 border-b border-indigo-900">
-          <h2 className="text-2xl font-semibold">Payments</h2>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search"
-                className="bg-indigo-900/50 pl-10 pr-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-600"
-              />
-            </div>
-            <button className="p-2 rounded-full hover:bg-indigo-900">
-              <Bell className="h-6 w-6" />
-            </button>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-white overflow-hidden mr-2">
-                <img
-                  src="/api/placeholder/40/40"
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-medium">Cynthia Doe</p>
-                <p className="text-xs text-gray-400">Artist</p>
-              </div>
-            </div>
-          </div>
-        </header>
+    <div className="flex-1 flex flex-col">
+      
 
         {/* Payments Content */}
         <div className="flex-1 p-6">
@@ -139,6 +76,5 @@ export default function MusicRoyaltiesPayments() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
