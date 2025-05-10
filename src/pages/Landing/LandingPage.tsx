@@ -10,6 +10,9 @@ import {
   Play,
 } from 'lucide-react';
 
+
+import cover from '../../images/cover/cover.png';
+
 export default function ZamIOLandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -139,7 +142,7 @@ export default function ZamIOLandingPage() {
               Collect Your Music Royalties{' '}
               <span className="text-indigo-400">Effortlessly</span>
             </h1>
-            <p className="text-lg md:text-xl mb-8 text-gray-300">
+            <p className="text-lg md:text-xl mb-8 text-gray">
               Ghana's first comprehensive platform that monitors radio and TV
               stations nationwide to ensure you get paid for every play of your
               music.
@@ -163,7 +166,7 @@ export default function ZamIOLandingPage() {
             <div className="relative w-full max-w-md">
               <div className="absolute inset-0 bg-indigo-500 rounded-full filter blur-3xl opacity-20"></div>
               <img
-                src="/api/placeholder/600/500"
+                src={cover}
                 alt="Dashboard Preview"
                 className="relative rounded-lg shadow-2xl border border-indigo-800"
               />

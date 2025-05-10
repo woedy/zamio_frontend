@@ -32,6 +32,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     { name: "Feedback/Reviews", icon: <MessageSquare className="w-5 h-5" /> , route: "/feedback"},
     { name: "Profile", icon: <User className="w-5 h-5" />, route: "/profile" },
     { name: "Settings", icon: <Settings className="w-5 h-5" />, route: "/settings" },
+    { name: "----Admin----", icon: '', route: "/90" },
+    { name: "All Artists", icon: '', route: "/all-artists" },
+
   ];
 
   // close on click outside

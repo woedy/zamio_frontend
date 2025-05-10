@@ -11,14 +11,12 @@ import AudioMatch from './pages/Project/AudioMatch';
 import MusicRoyaltiesDashboard from './pages/ArtistDashboard';
 import MusicRoyaltiesPayments from './pages/MusicRoyaltiesPayments';
 import ZamIOLandingPage from './pages/Landing/LandingPage';
+import AllArtists from './pages/Admin/Artists/ListAllArtists';
+import ArtistDetails from './pages/Admin/Artists/ArtistDetails';
+import AddArtist from './pages/Admin/Artists/AddArtist';
+import UploadTrack from './pages/Admin/Artists/UploadTrack';
 
-const hiddenOnRoutes = [
-  '/',
-  '/signup',
-  '/verify-user',
-  '/audio-match',
-  
-];
+const hiddenOnRoutes = ['/', '/signup', '/verify-user', '/audio-match'];
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,8 +38,7 @@ function App() {
   ) : shouldUseDefaultLayout ? (
     <DefaultLayout hiddenOnRoutes={hiddenOnRoutes}>
       <Routes>
-
-      <Route
+        <Route
           path="/dashboard"
           element={
             <>
@@ -51,16 +48,42 @@ function App() {
           }
         />
 
-<Route
-          path="/royalty-payments"
+        <Route
+          path="/all-artists"
           element={
             <>
-              <PageTitle title="Artist Payments | ZamIO" />
-              <MusicRoyaltiesPayments />
+              <PageTitle title="All Artist | Admin | ZamIO" />
+              <AllArtists />
             </>
           }
         />
-
+        <Route
+          path="/artist-details"
+          element={
+            <>
+              <PageTitle title="Artist Details | Admin | ZamIO" />
+              <ArtistDetails />
+            </>
+          }
+        />
+        <Route
+          path="/add-artist"
+          element={
+            <>
+              <PageTitle title="Add Artist | Admin | ZamIO" />
+              <AddArtist />
+            </>
+          }
+        />
+        <Route
+          path="/uploads"
+          element={
+            <>
+              <PageTitle title="Upload | Admin | ZamIO" />
+              <UploadTrack />
+            </>
+          }
+        />
       </Routes>
     </DefaultLayout>
   ) : (
@@ -85,9 +108,6 @@ function App() {
             </>
           }
         />
-       
-
-
       </Routes>
     </>
   );
