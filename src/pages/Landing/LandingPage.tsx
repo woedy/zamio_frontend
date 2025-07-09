@@ -81,13 +81,13 @@ export default function ZamIOLandingPage() {
 
           <div className="hidden md:block">
             <a
-              href="/login"
+              href="/sign-in"
               className="px-4 py-2 mr-2 border border-indigo-400 rounded-lg hover:bg-indigo-900 transition"
             >
               Login
             </a>
             <a
-              href="/signup"
+              href="/sign-up"
               className="px-4 py-2 bg-indigo-500 rounded-lg hover:bg-indigo-600 transition"
             >
               Sign Up

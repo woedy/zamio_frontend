@@ -1,3 +1,3 @@
 MIT License
 
-Copyright (c) 2025 Celean Water Ghana
+Copyright (c) 2025 ZamIo Admin

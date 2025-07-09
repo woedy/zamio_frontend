@@ -5,7 +5,6 @@ import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 
 import DefaultLayout from './layout/DefaultLayout';
-import SignUp from './pages/Authentication/SignUp';
 import LandingPage from './pages/Project/LandingPage';
 import AudioMatch from './pages/Project/AudioMatch';
 import MusicRoyaltiesDashboard from './pages/ArtistDashboard';
@@ -15,8 +14,10 @@ import AllArtists from './pages/Admin/Artists/ListAllArtists';
 import ArtistDetails from './pages/Admin/Artists/ArtistDetails';
 import AddArtist from './pages/Admin/Artists/AddArtist';
 import UploadTrack from './pages/Admin/Artists/UploadTrack';
+import SignIn from './pages/Authentication/SignIn';
+import SignUp from './pages/Authentication/SignUp';
 
-const hiddenOnRoutes = ['/', '/signup', '/verify-user', '/audio-match'];
+const hiddenOnRoutes = ['/', '/sign-up',  '/sign-in', '/verify-user', '/audio-match'];
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -42,7 +43,7 @@ function App() {
           path="/dashboard"
           element={
             <>
-              <PageTitle title="Artist Dasboard | ZamIO" />
+              <PageTitle title="Artist Dasboard | ZamIO-Artist" />
               <MusicRoyaltiesDashboard />
             </>
           }
@@ -52,7 +53,7 @@ function App() {
           path="/all-artists"
           element={
             <>
-              <PageTitle title="All Artist | Admin | ZamIO" />
+              <PageTitle title="All Artist | Admin | ZamIO-Artist" />
               <AllArtists />
             </>
           }
@@ -61,7 +62,7 @@ function App() {
           path="/artist-details"
           element={
             <>
-              <PageTitle title="Artist Details | Admin | ZamIO" />
+              <PageTitle title="Artist Details | Admin | ZamIO-Artist" />
               <ArtistDetails />
             </>
           }
@@ -70,7 +71,7 @@ function App() {
           path="/add-artist"
           element={
             <>
-              <PageTitle title="Add Artist | Admin | ZamIO" />
+              <PageTitle title="Add Artist | Admin | ZamIO-Artist" />
               <AddArtist />
             </>
           }
@@ -79,7 +80,7 @@ function App() {
           path="/uploads"
           element={
             <>
-              <PageTitle title="Upload | Admin | ZamIO" />
+              <PageTitle title="Upload | Admin | ZamIO-Artist" />
               <UploadTrack />
             </>
           }
@@ -93,7 +94,7 @@ function App() {
           index
           element={
             <>
-              <PageTitle title="Home | ZamIO" />
+              <PageTitle title="Home | ZamIO-Artist" />
               <ZamIOLandingPage />
             </>
           }
@@ -103,8 +104,27 @@ function App() {
           path="/audio-match"
           element={
             <>
-              <PageTitle title="Sign Up | ZamIO" />
+              <PageTitle title="Sign Up | ZamIO-Artist" />
               <AudioMatch />
+            </>
+          }
+        />
+
+        <Route
+          path="/sign-in"
+          element={
+            <>
+              <PageTitle title="Sign In | ZamIO-Artist" />
+              <SignIn />
+            </>
+          }
+        />
+        <Route
+          path="/sign-up"
+          element={
+            <>
+              <PageTitle title="Sign Up | ZamIO-Artist" />
+              <SignUp />
             </>
           }
         />

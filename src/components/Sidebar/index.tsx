@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Search, Bell, Settings, User, HelpCircle, MessageSquare, Upload, Clock, CreditCard, MapPin } from "lucide-react";
-
+import {
+  Search,
+  Bell,
+  Settings,
+  User,
+  HelpCircle,
+  MessageSquare,
+  Upload,
+  Clock,
+  CreditCard,
+  MapPin,
+  LucideWatch,
+  LucideAlertTriangle,
+} from 'lucide-react';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -11,7 +23,7 @@ interface SidebarProps {
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
-  const [activeTab, setActiveTab] = useState("Dashboard");
+  const [activeTab, setActiveTab] = useState('Dashboard');
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -21,20 +33,54 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
   );
 
-
   const navigationItems = [
-    { name: "Dashboard", icon: <Settings className="w-5 h-5" />, route: "/dashboard"},
-    { name: "Play History", icon: <Clock className="w-5 h-5" />, route: "/play-history" },
-    { name: "Upload/Management", icon: <Upload className="w-5 h-5" />, route: "/upload" },
-    { name: "Payments", icon: <CreditCard className="w-5 h-5" />, route: "/royalty-payments" },
-    { name: "Notifications", icon: <Bell className="w-5 h-5" /> , route: "/notifications"},
-    { name: "Help and Support", icon: <HelpCircle className="w-5 h-5" /> , route: "/help"},
-    { name: "Feedback/Reviews", icon: <MessageSquare className="w-5 h-5" /> , route: "/feedback"},
-    { name: "Profile", icon: <User className="w-5 h-5" />, route: "/profile" },
-    { name: "Settings", icon: <Settings className="w-5 h-5" />, route: "/settings" },
-    { name: "----Admin----", icon: '', route: "/90" },
-    { name: "All Artists", icon: '', route: "/all-artists" },
+    {
+      name: 'Dashboard',
+      icon: <Settings className="w-5 h-5" />,
+      route: '/dashboard',
+    },
+    {
+      name: 'Airplay & Streaming Analytics',
+      icon: <Clock className="w-5 h-5" />,
+      route: '/play-history',
+    },
+    {
+      name: 'Upload/Management',
+      icon: <Upload className="w-5 h-5" />,
+      route: '/upload',
+    },
+    {
+      name: 'Payments',
+      icon: <CreditCard className="w-5 h-5" />,
+      route: '/royalty-payments',
+    },
+    {
+      name: 'Notifications',
+      icon: <Bell className="w-5 h-5" />,
+      route: '/notifications',
+    },
+    {
+      name: 'Feedback/Reviews',
+      icon: <MessageSquare className="w-5 h-5" />,
+      route: '/feedback',
+    },
+    { name: 'Profile', icon: <User className="w-5 h-5" />, route: '/profile' },
+    {
+      name: 'Settings',
+      icon: <Settings className="w-5 h-5" />,
+      route: '/settings',
+    },
+    {
+      name: 'Legal & Compliance',
+      icon: <LucideAlertTriangle className="w-5 h-5" />,
+      route: '/help',
+    },
 
+    {
+      name: 'Help & Support',
+      icon: <HelpCircle className="w-5 h-5" />,
+      route: '/help',
+    },
   ];
 
   // close on click outside
@@ -83,14 +129,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <NavLink to="/dasboard">
           <div className="flex items-center gap-2">
-          
-
             <div>
               <h4 className="mb-1 text-3xl font-semibold text-black dark:text-white">
                 {'ZamIO'}
               </h4>
-
-         
             </div>
           </div>
         </NavLink>
@@ -129,26 +171,24 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </h3>
 
             <ul>
-            {navigationItems.map((item) => (
-              <li key={item.name}>
-                 <NavLink to={item.route}>
-                 
-                <button
-                  className={`flex items-center w-full px-6 py-3 hover:bg-indigo-900 transition-colors ${
-                    activeTab === item.name ? "bg-indigo-900 font-semibold" : ""
-                  }`}
-                  onClick={() => setActiveTab(item.name)}
-                >
-                  <span className="mr-3">{item.icon}</span>
-                  <span>{item.name}</span>
-                </button>
-</NavLink>
-
-              </li>
-            ))}
-          </ul>
-
-
+              {navigationItems.map((item) => (
+                <li key={item.name}>
+                  <NavLink to={item.route}>
+                    <button
+                      className={`flex items-center w-full px-6 py-3 hover:bg-indigo-900 transition-colors ${
+                        activeTab === item.name
+                          ? 'bg-indigo-900 font-semibold'
+                          : ''
+                      }`}
+                      onClick={() => setActiveTab(item.name)}
+                    >
+                      <span className="mr-3">{item.icon}</span>
+                      <span>{item.name}</span>
+                    </button>
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
           </div>
         </nav>
         {/* <!-- Sidebar Menu --> */}
