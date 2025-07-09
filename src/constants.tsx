@@ -14,15 +14,16 @@ export const baseWsUrl = "ws://localhost:8000/";
 //export const userToken = localStorage.getItem('token');
 export const userToken = localStorage.getItem('token');
 export const userID = localStorage.getItem('user_id');
+export const adminID = localStorage.getItem('admin_id');
 
 export const userEmail = localStorage.getItem('email');
 
 export const username = localStorage.getItem('username');
+export const firstName = localStorage.getItem('first_name');
+export const lastName = localStorage.getItem('last_name');
 
 
 export const userPhoto = localStorage.getItem('photo');
-export const projectID = localStorage.getItem('projectID');
-export const project_name = localStorage.getItem('project_name');
 
 
 export const truncateText = (text, maxLength) => {
