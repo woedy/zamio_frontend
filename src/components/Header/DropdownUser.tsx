@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserOne from '../../images/user/user-01.png';
-import { baseUrlMedia, userEmail, username, userPhoto } from '../../constants';
+import { baseUrlMedia, firstName, userEmail, username, userPhoto } from '../../constants';
 import ClickOutside from '../Sidebar/ClickOutside';
 
 const DropdownUser = () => {
@@ -17,18 +17,18 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-          {`${username}`} 
+            {`${firstName}`}
           </span>
           <span className="block text-xs">{userEmail}</span>
         </span>
 
         <span className="block h-12 w-12 rounded-full overflow-hidden">
-  <img
-    src={`${baseUrlMedia}${userPhoto}`}
-    alt="User"
-    className="object-cover w-full h-full"
-  />
-</span>
+          <img
+            src={`${baseUrlMedia}${userPhoto}`}
+            alt="User"
+            className="object-cover w-full h-full"
+          />
+        </span>
 
         <svg
           className="hidden fill-current sm:block"
@@ -78,7 +78,7 @@ const DropdownUser = () => {
                 My Profile
               </Link>
             </li>
-          <li>
+            <li>
               <Link
                 to="/settings"
                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"

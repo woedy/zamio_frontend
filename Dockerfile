@@ -2,7 +2,7 @@
 FROM node:16
 
 # Set the working directory.
-WORKDIR /clean_water_ghana_pro
+WORKDIR /zamio_admin_pro
 
 # Copy package.json and package-lock.json (if available).
 COPY package*.json ./

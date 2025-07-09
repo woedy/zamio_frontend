@@ -24,16 +24,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const navigationItems = [
     { name: "Dashboard", icon: <Settings className="w-5 h-5" />, route: "/dashboard"},
-    { name: "Play History", icon: <Clock className="w-5 h-5" />, route: "/play-history" },
-    { name: "Upload/Management", icon: <Upload className="w-5 h-5" />, route: "/upload" },
-    { name: "Payments", icon: <CreditCard className="w-5 h-5" />, route: "/royalty-payments" },
-    { name: "Notifications", icon: <Bell className="w-5 h-5" /> , route: "/notifications"},
-    { name: "Help and Support", icon: <HelpCircle className="w-5 h-5" /> , route: "/help"},
-    { name: "Feedback/Reviews", icon: <MessageSquare className="w-5 h-5" /> , route: "/feedback"},
-    { name: "Profile", icon: <User className="w-5 h-5" />, route: "/profile" },
+    { name: "Artist Management", icon: <User className="w-5 h-5" />, route: "/all-artists" },
+    { name: "Station Management", icon: <Clock className="w-5 h-5" />, route: "/play-history" },
+    { name: "Song & Detection Management", icon: <Upload className="w-5 h-5" />, route: "/upload" },
+    { name: "Dispute Resolution Panel", icon: <CreditCard className="w-5 h-5" />, route: "/royalty-payments" },
+    { name: "Royalty & Payments Oversight", icon: <Bell className="w-5 h-5" /> , route: "/notifications"},
+    { name: "Platform Analytics", icon: <HelpCircle className="w-5 h-5" /> , route: "/help"},
     { name: "Settings", icon: <Settings className="w-5 h-5" />, route: "/settings" },
-    { name: "----Admin----", icon: '', route: "/90" },
-    { name: "All Artists", icon: '', route: "/all-artists" },
+
 
   ];
 
