@@ -1,10 +1,6 @@
 version: '3.8'
 services:
-<<<<<<< HEAD
   zamio-artist-react-app:
-=======
-  zamio-admin-react-app:
->>>>>>> 4d63dbec7119255807124bca3c7d28e7055eef3c
     build: .
     ports:
       - "5173:5173"

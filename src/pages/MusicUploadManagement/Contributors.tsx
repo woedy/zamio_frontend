@@ -4,8 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { artistID, baseUrl, userToken } from '../../constants';
 import Pagination from '../../components/Pagination';
 
-export default function SongManager() {
-  const [tracks, setTracks] = useState([]);
+export default function TrackContributors() {
+  const [contributors, setContributors] = useState([]);
 
   const [search, setSearch] = useState('');
   const [filterSongs, setFilterSongs] = useState('');
@@ -20,6 +20,8 @@ export default function SongManager() {
     location.state?.successMessage || '',
   );
 
+  const { track_id } = location.state || {};
+
   useEffect(() => {
     // Clear the message after 5 seconds (optional)
     const timer = setTimeout(() => setSuccessMessage(''), 5000);
@@ -30,10 +32,10 @@ export default function SongManager() {
     setLoading(true);
     try {
       const response = await fetch(
-        `${baseUrl}api/artists/get-all-tracks/?search=${encodeURIComponent(
+        `${baseUrl}api/artists/get-all-contributors/?search=${encodeURIComponent(
           search,
-        )}&artist_id=${encodeURIComponent(
-          artistID,
+        )}&track_id=${encodeURIComponent(
+          track_id,
         )}&filter=${encodeURIComponent(filterSongs)}&page=${page}`,
         {
           headers: {
@@ -48,7 +50,7 @@ export default function SongManager() {
       }
 
       const data = await response.json();
-      setTracks(data.data.tracks);
+      setContributors(data.data.contributors);
       setTotalPages(data.data.pagination.total_pages);
       setItemCount(data.data.pagination.count);
       console.log('Total Pages:', data.data.pagination.total_pages);
@@ -68,7 +70,7 @@ export default function SongManager() {
     <div className="flex-1 flex flex-col">
       <div className="flex justify-between items-center p-6">
         <div className="flex gap-5 items-center">
-          <h3 className="text-xl font-semibold">My Songs</h3>
+          <h3 className="text-xl font-semibold">Song Contributors</h3>
 
           <input
             type="text"
@@ -87,28 +89,23 @@ export default function SongManager() {
               Filter
             </option>
 
-            <option value="Title" className="text-body dark:text-bodydark">
-              Title
+            <option value="Name" className="text-body dark:text-bodydark">
+              Name
             </option>
-            <option value="Genre" className="text-body dark:text-bodydark">
-              Genre
+            <option value="Role" className="text-body dark:text-bodydark">
+              Role
             </option>
-            <option value="Album" className="text-body dark:text-bodydark">
-              Album
+            <option value="Split" className="text-body dark:text-bodydark">
+            Split
             </option>
 
-            <option
-              value="Release Date"
-              className="text-body dark:text-bodydark"
-            >
-              Release Date
-            </option>
+       
           </select>
         </div>
 
-        <Link to="/add-track">
+        <Link to="/add-track-contributor" state={{ track_id: track_id }}>
           <button className="flex items-center px-4 py-2 bg-indigo-900 rounded-full hover:bg-indigo-800 transition">
-            <UserPlus className="w-4 h-4 mr-2" /> Add New Track
+            <UserPlus className="w-4 h-4 mr-2" /> Add New Contributor
           </button>
         </Link>
       </div>
@@ -130,40 +127,36 @@ export default function SongManager() {
         </div>
       )}
 
-      {/* Tracks Table */}
+      {/* Contributors Table */}
       <div className="flex-1 p-6 overflow-y-auto">
         <div className="bg-indigo-950 rounded-md shadow-md">
           <table className="w-full mb-5">
             <thead>
               <tr className="border-b border-indigo-800">
-                <th className="text-left py-3 px-4 font-medium">Track ID</th>
-                <th className="text-left py-3 px-4 font-medium">Title</th>
-                <th className="text-left py-3 px-4 font-medium">Artist</th>
-                <th className="text-left py-3 px-4 font-medium">Genre</th>
-                <th className="text-left py-3 px-4 font-medium">Album</th>
-                <th className="text-left py-3 px-4 font-medium">
-                  Release Date
-                </th>
+                <th className="text-left py-3 px-4 font-medium">Contributor ID</th>
+                <th className="text-left py-3 px-4 font-medium">Name</th>
+                <th className="text-left py-3 px-4 font-medium">Role</th>
+                <th className="text-left py-3 px-4 font-medium">% Split</th>
+        
                 <th className="text-left py-3 px-4 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {tracks?.map((track) => (
+              {contributors?.map((contributor) => (
                 <tr
-                  key={track?.track_id || 'default-key'}
+                  key={contributor?.contributor_id || 'default-key'}
                   className="border-b border-indigo-800 hover:bg-indigo-900/20"
                 >
-                  <td className="py-3 px-4">{track?.track_id}</td>
-                  <td className="py-3 px-4">{track?.title}</td>
-                  <td className="py-3 px-4">{track?.artist_name}</td>
-                  <td className="py-3 px-4">{track?.genre_name}</td>
-                  <td className="py-3 px-4">{track?.album_title}</td>
-                  <td className="py-3 px-4">{track?.release_date}</td>
+                  <td className="py-3 px-4">{contributor?.contributor_id}</td>
+                  <td className="py-3 px-4">{contributor?.name}</td>
+                  <td className="py-3 px-4">{contributor?.role}</td>
+                  <td className="py-3 px-4">{contributor?.percent_split}</td>
+                
                   <td className="py-3 px-4">
                     {/* Add action buttons here, e.g., View Profile, Edit */}
                     <Link
-                      to="/track-details"
-                      state={{ track_id: track?.track_id }}
+                      to="/contributor-details"
+                      state={{ contributor_id: contributor?.contributor_id }}
                     >
                       <button className="text-gray-300 hover:text-white mr-2">
                         View

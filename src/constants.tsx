@@ -14,7 +14,7 @@ export const baseWsUrl = "ws://localhost:8000/";
 //export const userToken = localStorage.getItem('token');
 export const userToken = localStorage.getItem('token');
 export const userID = localStorage.getItem('user_id');
-export const adminID = localStorage.getItem('admin_id');
+export const artistID = localStorage.getItem('artist_id');
 
 export const userEmail = localStorage.getItem('email');
 

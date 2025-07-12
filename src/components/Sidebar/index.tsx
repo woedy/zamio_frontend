@@ -36,7 +36,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const navigationItems = [
     { name: "Dashboard", icon: <Settings className="w-5 h-5" />, route: "/dashboard"},
     { name: "Play History", icon: <Clock className="w-5 h-5" />, route: "/play-history" },
-    { name: "Upload/Management", icon: <Upload className="w-5 h-5" />, route: "/upload" },
+    { name: "Upload/Management", icon: <Upload className="w-5 h-5" />, route: "/all-artist-songs" },
     { name: "Payments", icon: <CreditCard className="w-5 h-5" />, route: "/royalty-payments" },
     { name: "Notifications", icon: <Bell className="w-5 h-5" /> , route: "/notifications"},
     { name: "Help and Support", icon: <HelpCircle className="w-5 h-5" /> , route: "/help"},

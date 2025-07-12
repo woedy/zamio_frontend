@@ -90,7 +90,7 @@ export default function AllArtists() {
                   <td className="py-3 px-4">{artist?.registered_on}</td>
                   <td className="py-3 px-4">
                     {/* Add action buttons here, e.g., View Profile, Edit */}
-                    <Link to="/artist-details">
+                    <Link to="/artist-details" >
                       <button className="text-gray-300 hover:text-white mr-2">
                         View
                       </button>
