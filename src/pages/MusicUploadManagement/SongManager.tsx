@@ -1,194 +1,207 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Search, UserPlus, Music } from 'lucide-react'; // Added relevant icons
-import { Link, useLocation } from 'react-router-dom';
-import { artistID, baseUrl, userToken } from '../../constants';
-import Pagination from '../../components/Pagination';
+import React, { useState } from 'react';
+import { List, Grid3X3, Filter, Eye, Archive, Delete, DeleteIcon, LucideDelete, RemoveFormattingIcon, Plus, Search, Logs } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-export default function SongManager() {
-  const [tracks, setTracks] = useState([]);
+const ArtistTracksView = () => {
+  const [view, setView] = useState('table');
+  const [filter, setFilter] = useState('all');
 
-  const [search, setSearch] = useState('');
-  const [filterSongs, setFilterSongs] = useState('');
-  const [page, setPage] = useState(1);
-  const [itemCount, setItemCount] = useState(0);
-  const [totalPages, setTotalPages] = useState(1); // Default to 1 to avoid issues
+  const mockTracks = [
+    {
+      id: 1,
+      title: 'Freedom Ride',
+      duration: '3:45',
+      released: '2023-10-01',
+      genre: 'Afrobeat',
+      plays: 143,
+      status: 'Approved',
+      cover: '/covers/freedom.jpg',
+    },
+    {
+      id: 2,
+      title: 'Echoes in Kumasi',
+      duration: '4:02',
+      released: '2022-06-15',
+      genre: 'Highlife',
+      plays: 98,
+      status: 'Pending',
+      cover: '/covers/echoes.jpg',
+    },
+    {
+      id: 3,
+      title: 'Soul Fire',
+      duration: '3:33',
+      released: '2024-01-20',
+      genre: 'Hip Hop',
+      plays: 215,
+      status: 'Approved',
+      cover: '/covers/soulfire.jpg',
+    },
+  ];
 
-  const [loading, setLoading] = useState(false);
-
-  const location = useLocation();
-  const [successMessage, setSuccessMessage] = useState(
-    location.state?.successMessage || '',
-  );
-
-  useEffect(() => {
-    // Clear the message after 5 seconds (optional)
-    const timer = setTimeout(() => setSuccessMessage(''), 5000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${baseUrl}api/artists/get-all-tracks/?search=${encodeURIComponent(
-          search,
-        )}&artist_id=${encodeURIComponent(
-          artistID,
-        )}&filter=${encodeURIComponent(filterSongs)}&page=${page}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Token ${userToken}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      setTracks(data.data.tracks);
-      setTotalPages(data.data.pagination.total_pages);
-      setItemCount(data.data.pagination.count);
-      console.log('Total Pages:', data.data.pagination.total_pages);
-      console.log('ppp:', data.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [baseUrl, search, page, userToken, filterSongs]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  const filteredTracks = mockTracks.filter((track) => {
+    if (filter === 'all') return true;
+    return track.status.toLowerCase() === filter;
+  });
 
   return (
-    <div className="flex-1 flex flex-col">
-      <div className="flex justify-between items-center p-6">
-        <div className="flex gap-5 items-center">
-          <h3 className="text-xl font-semibold">My Songs</h3>
+    <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
+            {/* Header */}
+            <header className="bg-black/20 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-xl">
+                <Logs className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white">
+                🎶 My Tracks
+                </h1>
+                <p className="text-gray-300 text-sm">
+                  All tracks from all your albums
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="bg-white/10 backdrop-blur-md text-white pl-10 pr-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-          <input
-            type="text"
-            placeholder="Search here"
-            className="w-250 rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-
-          <select
-            value={filterSongs}
-            onChange={(e) => setFilterSongs(e.target.value)}
-            className="relative z-20 w-250 rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input "
-          >
-            <option value="" disabled="" class="text-body dark:text-bodydark">
-              Filter
-            </option>
-
-            <option value="Title" className="text-body dark:text-bodydark">
-              Title
-            </option>
-            <option value="Genre" className="text-body dark:text-bodydark">
-              Genre
-            </option>
-            <option value="Album" className="text-body dark:text-bodydark">
-              Album
-            </option>
-
-            <option
-              value="Release Date"
-              className="text-body dark:text-bodydark"
+      
+      
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">🎶</h1>
+          <div className="flex gap-4">
+          <button 
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-shadow flex items-center"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Song
+              </button>
+            <select
+              onChange={(e) => setFilter(e.target.value)}
+              className="bg-slate-800 text-white border border-white/10 rounded px-3 py-1 text-sm"
             >
-              Release Date
-            </option>
-          </select>
+              <option value="all">All</option>
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+            </select>
+            <button
+              className={`p-2 rounded-md ${
+                view === 'table' ? 'bg-indigo-600' : 'bg-slate-800'
+              }`}
+              onClick={() => setView('table')}
+            >
+              <List size={18} />
+            </button>
+            <button
+              className={`p-2 rounded-md ${
+                view === 'grid' ? 'bg-indigo-600' : 'bg-slate-800'
+              }`}
+              onClick={() => setView('grid')}
+            >
+              <Grid3X3 size={18} />
+            </button>
+          </div>
         </div>
 
-        <Link to="/add-track">
-          <button className="flex items-center px-4 py-2 bg-indigo-900 rounded-full hover:bg-indigo-800 transition">
-            <UserPlus className="w-4 h-4 mr-2" /> Add New Track
-          </button>
-        </Link>
-      </div>
-
-      {successMessage && (
-        <div
-          className="mb-4 rounded-lg border border-green bg-green px-4 py-3 text-white relative"
-          role="alert"
-        >
-          <strong className="font-bold">Success!</strong>
-          <span className="block sm:inline ml-2">{successMessage}</span>
-          <button
-            onClick={() => setSuccessMessage('')}
-            className="absolute top-0 bottom-0 right-0 px-4 py-3 text-green-700"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      )}
-
-      {/* Tracks Table */}
-      <div className="flex-1 p-6 overflow-y-auto">
-        <div className="bg-indigo-950 rounded-md shadow-md">
-          <table className="w-full mb-5">
-            <thead>
-              <tr className="border-b border-indigo-800">
-                <th className="text-left py-3 px-4 font-medium">Track ID</th>
-                <th className="text-left py-3 px-4 font-medium">Title</th>
-                <th className="text-left py-3 px-4 font-medium">Artist</th>
-                <th className="text-left py-3 px-4 font-medium">Genre</th>
-                <th className="text-left py-3 px-4 font-medium">Album</th>
-                <th className="text-left py-3 px-4 font-medium">
-                  Release Date
-                </th>
-                <th className="text-left py-3 px-4 font-medium">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tracks?.map((track) => (
-                <tr
-                  key={track?.track_id || 'default-key'}
-                  className="border-b border-indigo-800 hover:bg-indigo-900/20"
-                >
-                  <td className="py-3 px-4">{track?.track_id}</td>
-                  <td className="py-3 px-4">{track?.title}</td>
-                  <td className="py-3 px-4">{track?.artist_name}</td>
-                  <td className="py-3 px-4">{track?.genre_name}</td>
-                  <td className="py-3 px-4">{track?.album_title}</td>
-                  <td className="py-3 px-4">{track?.release_date}</td>
-                  <td className="py-3 px-4">
-                    {/* Add action buttons here, e.g., View Profile, Edit */}
-                    <Link
-                      to="/track-details"
-                      state={{ track_id: track?.track_id }}
-                    >
-                      <button className="text-gray-300 hover:text-white mr-2">
-                        View
-                      </button>
-                    </Link>
-                    <button className="text-gray-300 hover:text-white">
-                      Edit
-                    </button>
-                  </td>
+        {view === 'table' ? (
+          <div className="overflow-x-auto rounded-lg border border-white/10">
+            <table className="min-w-full text-sm text-white bg-white/5">
+              <thead className="bg-slate-800 text-left">
+                <tr>
+                  <th className="p-3">Title</th>
+                  <th className="p-3">Duration</th>
+                  <th className="p-3">Release Date</th>
+                  <th className="p-3">Genre</th>
+                  <th className="p-3">Airplays</th>
+                  <th className="p-3">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredTracks.map((track) => (
+                  <tr
+                    key={track.id}
+                    className="border-t border-white/10 hover:bg-white/10"
+                  >
+                    <td className="p-3 font-medium">{track.title}</td>
+                    <td className="p-3">{track.duration}</td>
+                    <td className="p-3">{track.released}</td>
+                    <td className="p-3">{track.genre}</td>
+                    <td className="p-3">{track.plays}</td>
+                    <td className="p-3">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                          track.status === 'Approved'
+                            ? 'bg-green-600'
+                            : 'bg-yellow-600'
+                        }`}
+                      >
+                        {track.status}
+                      </span>
+                    </td>
 
-          <Pagination
-            pagination={{
-              page_number: page,
-              total_pages: totalPages,
-              next: page < totalPages ? page + 1 : null,
-              previous: page > 1 ? page - 1 : null,
-            }}
-            setPage={setPage}
-          />
-        </div>
+                    <td>
+                      {' '}
+                      <div className='flex'>
+                        <Link to={'/track-details'} >
+                        <Eye className="w-4 h-4 mr-2" />
+                        </Link>
+                 
+                        <Archive className="w-4 h-4 mr-2" />
+                        <RemoveFormattingIcon className="w-4 h-4 mr-2" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {filteredTracks.map((track) => (
+              <div
+                key={track.id}
+                className="bg-white/5 p-4 rounded-lg border border-white/10"
+              >
+                <img
+                  src={track.cover}
+                  alt={track.title}
+                  className="w-full h-40 object-cover rounded mb-3"
+                />
+                <h3 className="text-lg font-bold">{track.title}</h3>
+                <p className="text-sm text-gray-300">{track.genre}</p>
+                <p className="text-sm text-gray-400">📆 {track.released}</p>
+                <p className="text-sm mt-2 text-indigo-400">
+                  {track.plays} plays
+                </p>
+                <span
+                  className={`inline-block mt-2 px-2 py-1 rounded-full text-xs font-semibold ${
+                    track.status === 'Approved'
+                      ? 'bg-green-600'
+                      : 'bg-yellow-600'
+                  }`}
+                >
+                  {track.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default ArtistTracksView;

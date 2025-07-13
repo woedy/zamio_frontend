@@ -6,7 +6,6 @@ import PageTitle from './components/PageTitle';
 
 import DefaultLayout from './layout/DefaultLayout';
 import SignUp from './pages/Authentication/SignUp';
-import AudioMatch from './pages/Project/AudioMatch';
 
 import ZamIOLandingPage from './pages/Landing/LandingPage';
 import SignIn from './pages/Authentication/SignIn';
@@ -22,6 +21,14 @@ import EditTractDetails from './pages/MusicUploadManagement/EditSong';
 import CoverUploader from './pages/MusicUploadManagement/UploadCoverArt';
 import TrackContributors from './pages/MusicUploadManagement/Contributors';
 import AddContributor from './pages/MusicUploadManagement/AddContributors';
+import MatchLogViewer from './pages/Song&DetectionManagement/FullDetectionTable';
+import ArtistAnalyticsPage from './pages/PlatformAnalytics/ArtistAnalyticsPage';
+import RoyaltyDashboard from './pages/Royalty&PaymentsOversight/ViewPaymentHistory';
+import NotificationCenter from './pages/NotificationCenter/NotificationCenter';
+import LegalCompliancePage from './pages/LegalCompliance/LegalComplains';
+import EducationSupport from './pages/TechSupport/HelpSupport';
+import FeedbackReviewsPage from './pages/FeedbackReview/FeedbackReview';
+import ArtistProfilePage from './pages/ArtistManagement/ArtistProfile';
 
 const hiddenOnRoutes = [
   '/',
@@ -131,6 +138,78 @@ function App() {
             </>
           }
         />
+        <Route
+          path="/match-logs"
+          element={
+            <>
+              <PageTitle title="Add Song Contributor | ZamIO-Artists" />
+              <MatchLogViewer />
+            </>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <>
+              <PageTitle title="Add Song Contributor | ZamIO-Artists" />
+              <ArtistAnalyticsPage />
+            </>
+          }
+        />
+        <Route
+          path="/royalty-payments"
+          element={
+            <>
+              <PageTitle title="Royalty & Payments | ZamIO-Artists" />
+              <RoyaltyDashboard />
+            </>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <>
+              <PageTitle title="Notification Center | ZamIO-Artists" />
+              <NotificationCenter />
+            </>
+          }
+        />
+        <Route
+          path="/legal"
+          element={
+            <>
+              <PageTitle title="Legal & Compliance | ZamIO-Artists" />
+              <LegalCompliancePage />
+            </>
+          }
+        />
+        <Route
+          path="/help"
+          element={
+            <>
+              <PageTitle title="Help & Support | ZamIO-Artists" />
+              <EducationSupport />
+            </>
+          }
+        />
+        <Route
+          path="/feedback"
+          element={
+            <>
+              <PageTitle title="Feedback & Compliance | ZamIO-Artists" />
+              <FeedbackReviewsPage />
+            </>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <>
+              <PageTitle title="Artist Page | ZamIO-Artists" />
+              <ArtistProfilePage />
+            </>
+          }
+        />
       </Routes>
     </DefaultLayout>
   ) : (
@@ -142,16 +221,6 @@ function App() {
             <>
               <PageTitle title="Home | ZamIO-Artists" />
               <ZamIOLandingPage />
-            </>
-          }
-        />
-
-        <Route
-          path="/audio-match"
-          element={
-            <>
-              <PageTitle title="Sign Up | ZamIO-Artists" />
-              <AudioMatch />
             </>
           }
         />

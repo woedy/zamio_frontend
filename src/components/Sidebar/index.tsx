@@ -34,18 +34,57 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   );
 
   const navigationItems = [
-    { name: "Dashboard", icon: <Settings className="w-5 h-5" />, route: "/dashboard"},
-    { name: "Play History", icon: <Clock className="w-5 h-5" />, route: "/play-history" },
-    { name: "Upload/Management", icon: <Upload className="w-5 h-5" />, route: "/all-artist-songs" },
-    { name: "Payments", icon: <CreditCard className="w-5 h-5" />, route: "/royalty-payments" },
-    { name: "Notifications", icon: <Bell className="w-5 h-5" /> , route: "/notifications"},
-    { name: "Help and Support", icon: <HelpCircle className="w-5 h-5" /> , route: "/help"},
-    { name: "Feedback/Reviews", icon: <MessageSquare className="w-5 h-5" /> , route: "/feedback"},
-    { name: "Profile", icon: <User className="w-5 h-5" />, route: "/profile" },
-    { name: "Settings", icon: <Settings className="w-5 h-5" />, route: "/settings" },
-    { name: "----Admin----", icon: '', route: "/90" },
-    { name: "All Artists", icon: '', route: "/all-artists" },
-
+    {
+      name: 'Dashboard',
+      icon: <Settings className="w-5 h-5" />,
+      route: '/dashboard',
+    },
+    {
+      name: 'Play Logs',
+      icon: <Clock className="w-5 h-5" />,
+      route: '/match-logs',
+    },
+    {
+      name: 'Upload/Management',
+      icon: <Upload className="w-5 h-5" />,
+      route: '/all-artist-songs',
+    },
+    {
+      name: 'Analytics',
+      icon: <CreditCard className="w-5 h-5" />,
+      route: '/analytics',
+    },
+    {
+      name: 'Payments',
+      icon: <CreditCard className="w-5 h-5" />,
+      route: '/royalty-payments',
+    },
+    {
+      name: 'Notifications',
+      icon: <Bell className="w-5 h-5" />,
+      route: '/notifications',
+    },
+    { name: 'Profile', icon: <User className="w-5 h-5" />, route: '/profile' },
+    {
+      name: 'Settings',
+      icon: <Settings className="w-5 h-5" />,
+      route: '/settings',
+    },
+    {
+      name: 'Legal',
+      icon: <HelpCircle className="w-5 h-5" />,
+      route: '/legal',
+    },
+    {
+      name: 'Feedback/Reviews',
+      icon: <MessageSquare className="w-5 h-5" />,
+      route: '/feedback',
+    },
+    {
+      name: 'Help and Support',
+      icon: <HelpCircle className="w-5 h-5" />,
+      route: '/help',
+    },
   ];
 
   // close on click outside
@@ -140,7 +179,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li key={item.name}>
                   <NavLink to={item.route}>
                     <button
-                      className={`flex items-center w-full px-6 py-3 hover:bg-indigo-900 transition-colors ${
+                      className={`flex items-center w-full px-6 py-2 text-sm hover:bg-indigo-900 transition-colors ${
                         activeTab === item.name
                           ? 'bg-indigo-900 font-semibold'
                           : ''
