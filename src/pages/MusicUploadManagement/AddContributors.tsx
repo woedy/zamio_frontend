@@ -8,14 +8,12 @@ export default function AddContributor() {
   const [contributorData, setContributorData] = useState({
     name: '',
     role: '',
-    album: '',
-    audioFile: null,
-    release_date: '',
+    percent_split: '',
   });
   const [inputError, setInputError] = useState(null); // "success", "error", null
   const [loading, setLoading] = useState(false);
 
-  const [roles, setRoles] = useState(['Composor']);
+  const [roles, setRoles] = useState(['Composor', 'Producer', 'Writer', 'Featured Artist', 'Mixer', 'Engineer']);
 
 
   const navigate = useNavigate();
@@ -37,14 +35,12 @@ export default function AddContributor() {
 
     const formData = new FormData();
     formData.append('track_id', track_id);
-    formData.append('artist_id', artistID);
     formData.append('name', contributorData.name);
-    formData.append('album_id', contributorData.album);
-    formData.append('role_id', contributorData.role);
-    formData.append('release_date', contributorData.release_date);
+    formData.append('role', contributorData.role);
+    formData.append('percent_split', contributorData.percent_split);
 
     try {
-      const url = baseUrl + 'api/artists/edit-track/';
+      const url = baseUrl + 'api/artists/add-contributor/';
 
       const response = await fetch(url, {
         method: 'POST',
@@ -119,7 +115,7 @@ export default function AddContributor() {
               //value={contributorData.name}
               onChange={handleChange}
               className="shadow-inner appearance-none border rounded w-full py-3 px-4 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-graydark"
-              placeholder="Enter track name"
+              placeholder="Enter contributor name"
               required
             />
           </div>
@@ -152,25 +148,25 @@ export default function AddContributor() {
               ))}
             </select>
           </div>
-
-          {/* Release Date (Optional) */}
           <div>
             <label
-              htmlFor="releaseDate"
+              htmlFor="percent_split"
               className="block text-emerald-200 text-sm font-bold mb-2"
             >
-              Release Date (Optional)
+              Contributor Split <span className="text-red-500">*</span>
             </label>
             <input
-              type="date"
-              id="releaseDate"
-              name="releaseDate"
-              value={contributorData.release_date}
-              onChange={(e) => setContributorData((prev) => ({...prev, release_date: e.target.value}))}
+              type="number"
+              id="percent_split"
+              name="percent_split"
+              value={contributorData.percent_split}
+              //value={contributorData.percent_split}
+              onChange={handleChange}
               className="shadow-inner appearance-none border rounded w-full py-3 px-4 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-graydark"
+              placeholder="Enter split"
+              required
             />
           </div>
-
           {/* Upload Button */}
           <div className="flex justify-end">
             {loading ? (

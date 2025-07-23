@@ -1,123 +1,245 @@
-import React, { useState } from 'react';
-import { Play, Music, TrendingUp, MapPin, Activity, Users, Calendar, Settings, Bell, Search, Filter, BarChart3, PieChart, Globe, Zap, Radio, Volume2, Eye, Star, Clock, Target, DollarSign, Download, Share2, Headphones, Heart, Mic, Award, Smartphone, Plus, Edit, Trash2, Upload, Save, X, Check, User, Mail, Phone, Instagram, Facebook, Twitter, ExternalLink, ChevronDown, ChevronUp, Copy, PlayCircle, PauseCircle, MoreHorizontal, FileText, CreditCard, History, UserPlus, Shield, AlertCircle, Verified, Home, LogOut, Menu } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import {
+  Play,
+  Music,
+  TrendingUp,
+  MapPin,
+  Activity,
+  Settings,
+  Bell,
+  BarChart3,
+  Radio,
+  Eye,
+  Clock,
+  Target,
+  DollarSign,
+  Share2,
+  Plus,
+  Edit,
+  Trash2,
+  Upload,
+  X,
+  ChevronDown,
+  ChevronUp,
+  Verified,
+} from 'lucide-react';
+import { artistID, baseUrl, baseUrlMedia, userToken } from '../../constants';
 
 const ArtistProfilePage = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedSong, setSelectedSong] = useState(null);
-  const [showAddSong, setShowAddSong] = useState(false);
   const [expandedSong, setExpandedSong] = useState(null);
   const [showAddContributor, setShowAddContributor] = useState(false);
   const [selectedContributor, setSelectedContributor] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const [artistData, setArtistData] = useState({});
+  const [songs, setSongs] = useState([]);
+  const [royaltyHistory, setRoyaltyHistory] = useState([]);
+  const [playLogs, setPlayLogs] = useState([]);
 
   // Sample artist data
-  const artistData = {
-    name: "Kofi Mensah",
-    stageName: "K-Mensah",
+  const artistData22 = {
+    name: 'Kofi Mensah',
+    stageName: 'K-Mensah',
     bio: "Award-winning Ghanaian artist blending traditional highlife with modern Afrobeats. Known for hits like 'Midnight Vibes' and 'Ghana My Home'.",
-    avatar: "/api/placeholder/150/150",
-    coverImage: "/api/placeholder/800/300",
+    avatar: '/api/placeholder/150/150',
+    coverImage: '/api/placeholder/800/300',
     verified: true,
     followers: 45782,
     totalPlays: 2847592,
-    totalEarnings: 15847.50,
-    joinDate: "2020-03-15",
-    location: "Accra, Ghana",
-    genres: ["Afrobeats", "Highlife", "Hip-Hop"],
+    totalEarnings: 15847.5,
+    joinDate: '2020-03-15',
+    location: 'Accra, Ghana',
+    genres: ['Afrobeats', 'Highlife', 'Hip-Hop'],
     contact: {
-      email: "kofi@example.com",
-      phone: "+233 24 123 4567",
-      instagram: "@kmensahofficial",
-      twitter: "@kmensah_music",
-      facebook: "KofiMensahMusic"
-    }
+      email: 'kofi@example.com',
+      phone: '+233 24 123 4567',
+      instagram: '@kmensahofficial',
+      twitter: '@kmensah_music',
+      facebook: 'KofiMensahMusic',
+    },
   };
 
-  const songs = [
+  const songs222 = [
     {
       id: 1,
-      title: "Midnight Vibes",
-      duration: "3:45",
-      releaseDate: "2023-08-15",
+      title: 'Midnight Vibes',
+      duration: '3:45',
+      releaseDate: '2023-08-15',
       totalPlays: 8745,
-      totalEarnings: 524.70,
-      status: "Active",
-      album: "Midnight Sessions",
-      genre: "Afrobeats",
+      totalEarnings: 524.7,
+      status: 'Active',
+      album: 'Midnight Sessions',
+      genre: 'Afrobeats',
       contributors: [
-        { name: "Kofi Mensah", role: "Lead Vocalist", percentage: 60 },
-        { name: "Kwame Asante", role: "Producer", percentage: 25 },
-        { name: "Ama Serwaa", role: "Songwriter", percentage: 15 }
+        { name: 'Kofi Mensah', role: 'Lead Vocalist', percentage: 60 },
+        { name: 'Kwame Asante', role: 'Producer', percentage: 25 },
+        { name: 'Ama Serwaa', role: 'Songwriter', percentage: 15 },
       ],
       recentPlays: [
-        { station: "Peace FM", date: "2024-01-15", plays: 12, earnings: 7.20 },
-        { station: "Hitz FM", date: "2024-01-15", plays: 8, earnings: 4.80 },
-        { station: "Joy FM", date: "2024-01-14", plays: 15, earnings: 9.00 }
-      ]
+        { station: 'Peace FM', date: '2024-01-15', plays: 12, earnings: 7.2 },
+        { station: 'Hitz FM', date: '2024-01-15', plays: 8, earnings: 4.8 },
+        { station: 'Joy FM', date: '2024-01-14', plays: 15, earnings: 9.0 },
+      ],
     },
     {
       id: 2,
-      title: "Ghana My Home",
-      duration: "4:12",
-      releaseDate: "2023-12-01",
+      title: 'Ghana My Home',
+      duration: '4:12',
+      releaseDate: '2023-12-01',
       totalPlays: 7234,
       totalEarnings: 434.04,
-      status: "Active",
-      album: "Heritage",
-      genre: "Highlife",
+      status: 'Active',
+      album: 'Heritage',
+      genre: 'Highlife',
       contributors: [
-        { name: "Kofi Mensah", role: "Lead Vocalist", percentage: 70 },
-        { name: "Nana Yaw", role: "Producer", percentage: 20 },
-        { name: "Efya", role: "Featured Artist", percentage: 10 }
+        { name: 'Kofi Mensah', role: 'Lead Vocalist', percentage: 70 },
+        { name: 'Nana Yaw', role: 'Producer', percentage: 20 },
+        { name: 'Efya', role: 'Featured Artist', percentage: 10 },
       ],
       recentPlays: [
-        { station: "Adom FM", date: "2024-01-15", plays: 10, earnings: 6.00 },
-        { station: "Okay FM", date: "2024-01-14", plays: 6, earnings: 3.60 }
-      ]
+        { station: 'Adom FM', date: '2024-01-15', plays: 10, earnings: 6.0 },
+        { station: 'Okay FM', date: '2024-01-14', plays: 6, earnings: 3.6 },
+      ],
     },
     {
       id: 3,
-      title: "Love Letter",
-      duration: "3:28",
-      releaseDate: "2023-06-20",
+      title: 'Love Letter',
+      duration: '3:28',
+      releaseDate: '2023-06-20',
       totalPlays: 6543,
       totalEarnings: 392.58,
-      status: "Active",
-      album: "Emotions",
-      genre: "R&B",
+      status: 'Active',
+      album: 'Emotions',
+      genre: 'R&B',
       contributors: [
-        { name: "Kofi Mensah", role: "Lead Vocalist", percentage: 80 },
-        { name: "Richie Mensah", role: "Producer", percentage: 20 }
+        { name: 'Kofi Mensah', role: 'Lead Vocalist', percentage: 80 },
+        { name: 'Richie Mensah', role: 'Producer', percentage: 20 },
       ],
       recentPlays: [
-        { station: "Y FM", date: "2024-01-15", plays: 5, earnings: 3.00 },
-        { station: "Live FM", date: "2024-01-14", plays: 7, earnings: 4.20 }
-      ]
-    }
+        { station: 'Y FM', date: '2024-01-15', plays: 5, earnings: 3.0 },
+        { station: 'Live FM', date: '2024-01-14', plays: 7, earnings: 4.2 },
+      ],
+    },
   ];
 
-  const royaltyHistory = [
-    { date: "2024-01-15", amount: 145.30, source: "Radio Airplay", status: "Paid" },
-    { date: "2024-01-14", amount: 98.75, source: "Streaming", status: "Paid" },
-    { date: "2024-01-13", amount: 234.50, source: "Radio Airplay", status: "Paid" },
-    { date: "2024-01-12", amount: 67.20, source: "Radio Airplay", status: "Pending" },
-    { date: "2024-01-11", amount: 189.40, source: "Radio Airplay", status: "Paid" }
+  const royaltyHistory222 = [
+    {
+      date: '2024-01-15',
+      amount: 145.3,
+      source: 'Radio Airplay',
+      status: 'Paid',
+    },
+    { date: '2024-01-14', amount: 98.75, source: 'Streaming', status: 'Paid' },
+    {
+      date: '2024-01-13',
+      amount: 234.5,
+      source: 'Radio Airplay',
+      status: 'Paid',
+    },
+    {
+      date: '2024-01-12',
+      amount: 67.2,
+      source: 'Radio Airplay',
+      status: 'Pending',
+    },
+    {
+      date: '2024-01-11',
+      amount: 189.4,
+      source: 'Radio Airplay',
+      status: 'Paid',
+    },
   ];
 
-  const playLogs = [
-    { id: 1, song: "Midnight Vibes", station: "Peace FM", date: "2024-01-15 14:30", duration: "3:45", confidence: 98, earnings: 0.60 },
-    { id: 2, song: "Ghana My Home", station: "Hitz FM", date: "2024-01-15 12:15", duration: "4:12", confidence: 96, earnings: 0.60 },
-    { id: 3, song: "Love Letter", station: "Joy FM", date: "2024-01-15 10:45", duration: "3:28", confidence: 94, earnings: 0.60 },
-    { id: 4, song: "Midnight Vibes", station: "Adom FM", date: "2024-01-15 09:20", duration: "3:45", confidence: 92, earnings: 0.60 },
-    { id: 5, song: "Ghana My Home", station: "Okay FM", date: "2024-01-15 08:10", duration: "4:12", confidence: 89, earnings: 0.60 }
+  const playLogs222 = [
+    {
+      id: 1,
+      song: 'Midnight Vibes',
+      station: 'Peace FM',
+      date: '2024-01-15 14:30',
+      duration: '3:45',
+      confidence: 98,
+      earnings: 0.6,
+    },
+    {
+      id: 2,
+      song: 'Ghana My Home',
+      station: 'Hitz FM',
+      date: '2024-01-15 12:15',
+      duration: '4:12',
+      confidence: 96,
+      earnings: 0.6,
+    },
+    {
+      id: 3,
+      song: 'Love Letter',
+      station: 'Joy FM',
+      date: '2024-01-15 10:45',
+      duration: '3:28',
+      confidence: 94,
+      earnings: 0.6,
+    },
+    {
+      id: 4,
+      song: 'Midnight Vibes',
+      station: 'Adom FM',
+      date: '2024-01-15 09:20',
+      duration: '3:45',
+      confidence: 92,
+      earnings: 0.6,
+    },
+    {
+      id: 5,
+      song: 'Ghana My Home',
+      station: 'Okay FM',
+      date: '2024-01-15 08:10',
+      duration: '4:12',
+      confidence: 89,
+      earnings: 0.6,
+    },
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          baseUrl + `api/artists/get-artist-profile/?artist_id=${artistID}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Token ${userToken}`,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        setArtistData(data.data.artistData);
+        setSongs(data.data.songs);
+        setRoyaltyHistory(data.data.royaltyHistory);
+        setPlayLogs(data.data.playLogs);
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const TabButton = ({ id, label, icon: Icon, isActive, onClick }) => (
     <button
       onClick={() => onClick(id)}
       className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-        isActive 
-          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg' 
+        isActive
+          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
           : 'text-gray-300 hover:text-white hover:bg-white/10'
       }`}
     >
@@ -135,14 +257,20 @@ const ArtistProfilePage = () => {
           </div>
           <div>
             <h3 className="text-lg font-semibold text-white">{song.title}</h3>
-            <p className="text-sm text-gray-300">{song.duration} • {song.album} • {song.genre}</p>
+            <p className="text-sm text-gray-300">
+              {song.duration} • {song.album} • {song.genre}
+            </p>
             <p className="text-xs text-gray-400">Released {song.releaseDate}</p>
           </div>
         </div>
         <div className="flex items-center space-x-4">
           <div className="text-right">
-            <div className="text-white font-semibold">{song.totalPlays.toLocaleString()} plays</div>
-            <div className="text-green-400 text-sm">₵{song.totalEarnings.toFixed(2)}</div>
+            <div className="text-white font-semibold">
+              {song.totalPlays.toLocaleString()} plays
+            </div>
+            <div className="text-green-400 text-sm">
+              ₵{song.totalEarnings.toFixed(2)}
+            </div>
           </div>
           <div className="flex items-center space-x-2">
             <button className="bg-green-500/20 text-green-400 p-2 rounded-lg hover:bg-green-500/30 transition-colors">
@@ -152,7 +280,11 @@ const ArtistProfilePage = () => {
               onClick={() => onToggle(song.id)}
               className="bg-white/10 p-2 rounded-lg hover:bg-white/20 transition-colors"
             >
-              {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-300" /> : <ChevronDown className="w-4 h-4 text-gray-300" />}
+              {isExpanded ? (
+                <ChevronUp className="w-4 h-4 text-gray-300" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-gray-300" />
+              )}
             </button>
           </div>
         </div>
@@ -163,8 +295,10 @@ const ArtistProfilePage = () => {
           {/* Contributors */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-semibold text-white">Contributors & Splits</h4>
-              <button 
+              <h4 className="text-sm font-semibold text-white">
+                Contributors & Splits
+              </h4>
+              <button
                 onClick={() => setShowAddContributor(true)}
                 className="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-lg text-sm hover:bg-purple-500/30 transition-colors flex items-center"
               >
@@ -174,13 +308,22 @@ const ArtistProfilePage = () => {
             </div>
             <div className="space-y-2">
               {song.contributors.map((contributor, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+                >
                   <div>
-                    <div className="text-white font-medium">{contributor.name}</div>
-                    <div className="text-sm text-gray-300">{contributor.role}</div>
+                    <div className="text-white font-medium">
+                      {contributor.name}
+                    </div>
+                    <div className="text-sm text-gray-300">
+                      {contributor.role}
+                    </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-purple-400 font-semibold">{contributor.percentage}%</div>
+                    <div className="text-purple-400 font-semibold">
+                      {contributor.percentage}%
+                    </div>
                     <button className="text-gray-400 hover:text-white">
                       <Edit className="w-3 h-3" />
                     </button>
@@ -192,22 +335,31 @@ const ArtistProfilePage = () => {
 
           {/* Recent Plays */}
           <div>
-            <h4 className="text-sm font-semibold text-white mb-3">Recent Plays</h4>
+            <h4 className="text-sm font-semibold text-white mb-3">
+              Recent Plays
+            </h4>
             <div className="space-y-2">
               {song.recentPlays.map((play, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+                >
                   <div className="flex items-center space-x-3">
                     <div className="bg-blue-500/20 p-2 rounded-lg">
                       <Radio className="w-4 h-4 text-blue-400" />
                     </div>
                     <div>
-                      <div className="text-white font-medium">{play.station}</div>
+                      <div className="text-white font-medium">
+                        {play.station}
+                      </div>
                       <div className="text-sm text-gray-300">{play.date}</div>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-white">{play.plays} plays</div>
-                    <div className="text-green-400 text-sm">₵{play.earnings.toFixed(2)}</div>
+                    <div className="text-green-400 text-sm">
+                      ₵{play.earnings.toFixed(2)}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -246,32 +398,41 @@ const ArtistProfilePage = () => {
         <div className="bg-slate-900 rounded-2xl p-6 w-full max-w-md border border-white/20">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-white">Add New Song</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-white"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
-          
+
           <form className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Song Title</label>
-              <input 
-                type="text" 
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Song Title
+              </label>
+              <input
+                type="text"
                 className="w-full bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400"
                 placeholder="Enter song title"
               />
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Duration</label>
-                <input 
-                  type="text" 
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Duration
+                </label>
+                <input
+                  type="text"
                   className="w-full bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400"
                   placeholder="3:45"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Genre</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Genre
+                </label>
                 <select className="w-full bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400">
                   <option>Afrobeats</option>
                   <option>Highlife</option>
@@ -280,33 +441,39 @@ const ArtistProfilePage = () => {
                 </select>
               </div>
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Album</label>
-              <input 
-                type="text" 
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Album
+              </label>
+              <input
+                type="text"
                 className="w-full bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400"
                 placeholder="Album name"
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Audio File</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Audio File
+              </label>
               <div className="border-2 border-dashed border-white/20 rounded-lg p-4 text-center">
                 <Upload className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm text-gray-400">Click to upload or drag and drop</p>
+                <p className="text-sm text-gray-400">
+                  Click to upload or drag and drop
+                </p>
               </div>
             </div>
-            
+
             <div className="flex space-x-4 pt-4">
-              <button 
+              <button
                 type="button"
                 onClick={onClose}
                 className="flex-1 bg-white/10 text-white py-2 rounded-lg hover:bg-white/20 transition-colors"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 type="submit"
                 className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-lg hover:shadow-lg transition-shadow"
               >
@@ -335,8 +502,8 @@ const ArtistProfilePage = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <button 
-                onClick={() => setShowAddSong(true)}
+              <button
+                //onClick={() => setShowAddSong(true)}
                 className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-shadow flex items-center"
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -359,8 +526,8 @@ const ArtistProfilePage = () => {
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center space-x-6">
               <div className="relative">
-                <img 
-                  src={artistData.avatar} 
+                <img
+                  src={`${baseUrlMedia}${artistData?.avatar}`}
                   alt={artistData.name}
                   className="w-24 h-24 rounded-2xl object-cover border-4 border-white/20"
                 />
@@ -372,8 +539,12 @@ const ArtistProfilePage = () => {
               </div>
               <div>
                 <div className="flex items-center space-x-3 mb-2">
-                  <h1 className="text-3xl font-bold text-white">{artistData.name}</h1>
-                  <span className="text-lg text-gray-300">({artistData.stageName})</span>
+                  <h1 className="text-3xl font-bold text-white">
+                    {artistData.name}
+                  </h1>
+                  <span className="text-lg text-gray-300">
+                    ({artistData.stageName})
+                  </span>
                 </div>
                 <p className="text-gray-300 mb-3 max-w-2xl">{artistData.bio}</p>
                 <div className="flex items-center space-x-4 text-sm text-gray-400">
@@ -384,11 +555,16 @@ const ArtistProfilePage = () => {
                   <span>•</span>
                   <span>Joined {artistData.joinDate}</span>
                   <span>•</span>
-                  <span>{artistData.followers.toLocaleString()} followers</span>
+                  <span>
+                    {artistData?.followers?.toLocaleString()} followers
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2 mt-3">
-                  {artistData.genres.map((genre, idx) => (
-                    <span key={idx} className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full text-xs">
+                  {artistData?.genres?.map((genre, idx) => (
+                    <span
+                      key={idx}
+                      className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full text-xs"
+                    >
                       {genre}
                     </span>
                   ))}
@@ -413,15 +589,21 @@ const ArtistProfilePage = () => {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center p-4 bg-white/5 rounded-xl">
-              <div className="text-2xl font-bold text-white">{artistData.totalPlays.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-white">
+                {artistData?.totalPlays?.toLocaleString()}
+              </div>
               <div className="text-sm text-gray-300">Total Plays</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-xl">
-              <div className="text-2xl font-bold text-green-400">₵{artistData.totalEarnings.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-green-400">
+                ₵{artistData?.totalEarnings?.toLocaleString()}
+              </div>
               <div className="text-sm text-gray-300">Total Earnings</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-xl">
-              <div className="text-2xl font-bold text-purple-400">{songs.length}</div>
+              <div className="text-2xl font-bold text-purple-400">
+                {songs.length}
+              </div>
               <div className="text-sm text-gray-300">Songs Registered</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-xl">
@@ -433,11 +615,41 @@ const ArtistProfilePage = () => {
 
         {/* Navigation Tabs */}
         <div className="flex space-x-2 mb-8 bg-white/10 backdrop-blur-md p-1 rounded-lg border border-white/20 w-fit">
-          <TabButton id="overview" label="Overview" icon={Eye} isActive={activeTab === 'overview'} onClick={setActiveTab} />
-          <TabButton id="songs" label="Songs" icon={Music} isActive={activeTab === 'songs'} onClick={setActiveTab} />
-          <TabButton id="playlogs" label="Play Logs" icon={Activity} isActive={activeTab === 'playlogs'} onClick={setActiveTab} />
-          <TabButton id="royalties" label="Royalties" icon={DollarSign} isActive={activeTab === 'royalties'} onClick={setActiveTab} />
-          <TabButton id="analytics" label="Analytics" icon={BarChart3} isActive={activeTab === 'analytics'} onClick={setActiveTab} />
+          <TabButton
+            id="overview"
+            label="Overview"
+            icon={Eye}
+            isActive={activeTab === 'overview'}
+            onClick={setActiveTab}
+          />
+          <TabButton
+            id="songs"
+            label="Songs"
+            icon={Music}
+            isActive={activeTab === 'songs'}
+            onClick={setActiveTab}
+          />
+          <TabButton
+            id="playlogs"
+            label="Play Logs"
+            icon={Activity}
+            isActive={activeTab === 'playlogs'}
+            onClick={setActiveTab}
+          />
+          <TabButton
+            id="royalties"
+            label="Royalties"
+            icon={DollarSign}
+            isActive={activeTab === 'royalties'}
+            onClick={setActiveTab}
+          />
+          <TabButton
+            id="analytics"
+            label="Analytics"
+            icon={BarChart3}
+            isActive={activeTab === 'analytics'}
+            onClick={setActiveTab}
+          />
         </div>
 
         {/* Tab Content */}
@@ -452,17 +664,26 @@ const ArtistProfilePage = () => {
                 </h2>
                 <div className="space-y-3">
                   {playLogs.slice(0, 5).map((log) => (
-                    <div key={log.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                    <div
+                      key={log.id}
+                      className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
                         <div className="bg-blue-500/20 p-2 rounded-lg">
                           <Radio className="w-4 h-4 text-blue-400" />
                         </div>
                         <div>
-                          <div className="text-white font-medium">{log.song}</div>
-                          <div className="text-sm text-gray-300">{log.station} • {log.date}</div>
+                          <div className="text-white font-medium">
+                            {log.song}
+                          </div>
+                          <div className="text-sm text-gray-300">
+                            {log.station} • {log.date}
+                          </div>
                         </div>
                       </div>
-                      <div className="text-green-400 font-semibold">₵{log.earnings.toFixed(2)}</div>
+                      <div className="text-green-400 font-semibold">
+                        ₵{log.earnings.toFixed(2)}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -476,17 +697,26 @@ const ArtistProfilePage = () => {
                 </h2>
                 <div className="space-y-3">
                   {songs.slice(0, 3).map((song, idx) => (
-                    <div key={song.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                    <div
+                      key={song.id}
+                      className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
                         <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
                           {idx + 1}
                         </div>
                         <div>
-                          <div className="text-white font-medium">{song.title}</div>
-                          <div className="text-sm text-gray-300">{song.totalPlays.toLocaleString()} plays</div>
+                          <div className="text-white font-medium">
+                            {song.title}
+                          </div>
+                          <div className="text-sm text-gray-300">
+                            {song.totalPlays.toLocaleString()} plays
+                          </div>
                         </div>
                       </div>
-                      <div className="text-green-400 font-semibold">₵{song.totalEarnings.toFixed(2)}</div>
+                      <div className="text-green-400 font-semibold">
+                        ₵{song.totalEarnings.toFixed(2)}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -505,7 +735,9 @@ const ArtistProfilePage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-300">Total Earnings</span>
-                    <span className="text-green-400 font-semibold">₵748.20</span>
+                    <span className="text-green-400 font-semibold">
+                      ₵748.20
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-300">New Followers</span>
@@ -513,7 +745,9 @@ const ArtistProfilePage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-300">Radio Coverage</span>
-                    <span className="text-blue-400 font-semibold">12 stations</span>
+                    <span className="text-blue-400 font-semibold">
+                      12 stations
+                    </span>
                   </div>
                 </div>
               </div>
@@ -525,15 +759,26 @@ const ArtistProfilePage = () => {
                   Pending Royalties
                 </h2>
                 <div className="space-y-3">
-                {royaltyHistory.filter(r => r.status === 'Pending').map((transaction, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                      <div>
-                        <div className="text-white font-medium">{transaction.source}</div>
-                        <div className="text-sm text-gray-300">{transaction.date}</div>
+                  {royaltyHistory
+                    .filter((r) => r.status === 'Pending')
+                    .map((transaction, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+                      >
+                        <div>
+                          <div className="text-white font-medium">
+                            {transaction.source}
+                          </div>
+                          <div className="text-sm text-gray-300">
+                            {transaction.date}
+                          </div>
+                        </div>
+                        <div className="text-yellow-400 font-semibold">
+                          ₵{transaction.amount.toFixed(2)}
+                        </div>
                       </div>
-                      <div className="text-yellow-400 font-semibold">₵{transaction.amount.toFixed(2)}</div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             </div>
@@ -542,12 +787,14 @@ const ArtistProfilePage = () => {
           {/* Songs Tab */}
           {activeTab === 'songs' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {songs.map(song => (
-                <SongCard 
+              {songs.map((song) => (
+                <SongCard
                   key={song.id}
                   song={song}
                   isExpanded={expandedSong === song.id}
-                  onToggle={(id) => setExpandedSong(expandedSong === id ? null : id)}
+                  onToggle={(id) =>
+                    setExpandedSong(expandedSong === id ? null : id)
+                  }
                 />
               ))}
             </div>
@@ -573,14 +820,16 @@ const ArtistProfilePage = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white/5 divide-y divide-white/10">
-                    {playLogs.map(log => (
+                    {playLogs.map((log) => (
                       <tr key={log.id}>
                         <td className="px-4 py-2 text-white">{log.song}</td>
                         <td className="px-4 py-2">{log.station}</td>
                         <td className="px-4 py-2">{log.date}</td>
                         <td className="px-4 py-2">{log.duration}</td>
                         <td className="px-4 py-2">{log.confidence}%</td>
-                        <td className="px-4 py-2 text-green-400 font-medium">₵{log.earnings.toFixed(2)}</td>
+                        <td className="px-4 py-2 text-green-400 font-medium">
+                          ₵{log.earnings.toFixed(2)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -611,13 +860,17 @@ const ArtistProfilePage = () => {
                       <tr key={idx}>
                         <td className="px-4 py-2 text-white">{royalty.date}</td>
                         <td className="px-4 py-2">{royalty.source}</td>
-                        <td className="px-4 py-2 text-green-400">₵{royalty.amount.toFixed(2)}</td>
+                        <td className="px-4 py-2 text-green-400">
+                          ₵{royalty.amount.toFixed(2)}
+                        </td>
                         <td className="px-4 py-2">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            royalty.status === 'Paid' 
-                              ? 'bg-green-500/20 text-green-300' 
-                              : 'bg-yellow-500/20 text-yellow-300'
-                          }`}>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              royalty.status === 'Paid'
+                                ? 'bg-green-500/20 text-green-300'
+                                : 'bg-yellow-500/20 text-yellow-300'
+                            }`}
+                          >
                             {royalty.status}
                           </span>
                         </td>
@@ -636,24 +889,33 @@ const ArtistProfilePage = () => {
                 <BarChart3 className="w-5 h-5 mr-2 text-cyan-400" />
                 Analytics Overview
               </h2>
-              <p className="text-sm text-gray-400 mb-4">[Future: Add D3.js / Chart.js / Recharts visualizations here]</p>
+              <p className="text-sm text-gray-400 mb-4">
+                [Future: Add D3.js / Chart.js / Recharts visualizations here]
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-4 bg-white/5 rounded-xl text-white">
                   <h3 className="font-semibold mb-2">Most Played Song</h3>
-                  <p>{songs.sort((a, b) => b.totalPlays - a.totalPlays)[0]?.title}</p>
+                  <p>
+                    {
+                      songs.sort((a, b) => b.totalPlays - a.totalPlays)[0]
+                        ?.title
+                    }
+                  </p>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl text-white">
                   <h3 className="font-semibold mb-2">Top Earning Song</h3>
-                  <p>{songs.sort((a, b) => b.totalEarnings - a.totalEarnings)[0]?.title}</p>
+                  <p>
+                    {
+                      songs.sort((a, b) => b.totalEarnings - a.totalEarnings)[0]
+                        ?.title
+                    }
+                  </p>
                 </div>
               </div>
             </div>
           )}
         </div>
       </div>
-
-      {/* Modals */}
-      <AddSongModal isOpen={showAddSong} onClose={() => setShowAddSong(false)} />
     </div>
   );
 };

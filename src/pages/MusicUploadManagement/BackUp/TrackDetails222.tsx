@@ -10,10 +10,10 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { baseUrl, baseUrlMedia, userToken } from '../../constants';
-import ChartOne from './ChartOne';
-import ChartThree from './ChartThree';
-import ChartTwo from './ChartTwo';
+import { baseUrl, baseUrlMedia, userToken } from '../../../constants';
+import ChartOne from '../ChartOne';
+import ChartThree from '../ChartThree';
+import ChartTwo from '../ChartTwo';
 
 import map from '../../images/map.png';
 import hitzfm from '../../images/hitzfm.png';
@@ -32,8 +32,6 @@ export default function TractDetails() {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [audioUrl, setAudioUrl] = useState(null);
-
-
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -56,8 +54,6 @@ export default function TractDetails() {
     };
   }, [audioUrl]);
 
-
-  
   const togglePlay = () => {
     const audio = audioRef.current;
     if (isPlaying) {
@@ -83,7 +79,6 @@ export default function TractDetails() {
       .padStart(2, '0');
     return `${minutes}:${seconds}`;
   };
-
 
   // Sample data for recent airplays
   const recentAirplays = [
@@ -128,20 +123,20 @@ export default function TractDetails() {
               'Content-Type': 'application/json',
               Authorization: `Token ${userToken}`,
             },
-          }
+          },
         );
-  
+
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-  
+
         const data = await response.json();
         setTrackDetails(data.data);
-  
+
         // OPTION 1: If the file is public
         const fullAudioUrl = `${baseUrlMedia}${data.data.audio_file}`;
         setAudioUrl(fullAudioUrl);
-  
+
         // OR — OPTION 2: If the file is protected and needs a token
         /*
         const audioResponse = await fetch(fullAudioUrl, {
@@ -160,21 +155,20 @@ export default function TractDetails() {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
   return (
     <div className="flex-1 flex flex-col p-6">
       <div className="flex mb-5 gap-3">
-      <div className="h-40 w-40 rounded overflow-hidden shadow-1">
-  <img
-    src={`${baseUrlMedia}${trackDetails?.cover_art}`}
-    alt="Cover Art"
-    className="h-full w-full object-cover"
-  />
-</div>
-
+        <div className="h-40 w-40 rounded overflow-hidden shadow-1">
+          <img
+            src={`${baseUrlMedia}${trackDetails?.cover_art}`}
+            alt="Cover Art"
+            className="h-full w-full object-cover"
+          />
+        </div>
 
         <div className="mb-6 w-100">
           <h2 className="text-2xl font-semibold flex items-center mb-2">
@@ -200,61 +194,65 @@ export default function TractDetails() {
         </div>
 
         <div className="w-full max-w-xl mx-auto bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-xl shadow-lg p-6 flex flex-col items-center space-y-4">
-  {audioUrl ? (
-    <>
-      <audio ref={audioRef} src={audioUrl} preload="metadata" />
+          {audioUrl ? (
+            <>
+              <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
-      {/* Song Title (Optional) */}
-      <h3 className="text-lg font-semibold text-center">Now Playing</h3>
+              {/* Song Title (Optional) */}
+              <h3 className="text-lg font-semibold text-center">Now Playing</h3>
 
-      {/* Play/Pause Button */}
-      <button
-        onClick={togglePlay}
-        className="w-14 h-14 rounded-full bg-blue-500 hover:bg-blue-600 shadow-lg flex items-center justify-center text-white text-xl transition"
-      >
-        {isPlaying ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6" />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        )}
-      </button>
+              {/* Play/Pause Button */}
+              <button
+                onClick={togglePlay}
+                className="w-14 h-14 rounded-full bg-blue-500 hover:bg-blue-600 shadow-lg flex items-center justify-center text-white text-xl transition"
+              >
+                {isPlaying ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 9v6m4-6v6"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                )}
+              </button>
 
-      {/* Time and Slider */}
-      <div className="w-full flex flex-col space-y-2">
-        <input
-          type="range"
-          min="0"
-          max={duration}
-          value={currentTime}
-          onChange={handleRangeChange}
-          className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-500"
-        />
-        <div className="flex justify-between text-sm text-gray-300 font-mono">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+              {/* Time and Slider */}
+              <div className="w-full flex flex-col space-y-2">
+                <input
+                  type="range"
+                  min="0"
+                  max={duration}
+                  value={currentTime}
+                  onChange={handleRangeChange}
+                  className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                />
+                <div className="flex justify-between text-sm text-gray-300 font-mono">
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(duration)}</span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <p className="text-gray-400">Loading audio...</p>
+          )}
         </div>
-      </div>
-    </>
-  ) : (
-    <p className="text-gray-400">Loading audio...</p>
-  )}
-</div>
-
       </div>
 
       <div className="flex mb-3 gap-3">
@@ -279,7 +277,7 @@ export default function TractDetails() {
             <UserPlus className="w-4 h-4 mr-2" /> Fingerprint Details
           </button>
         </Link>
-        <Link to="/add-track-cover"  state={{ track_id: track_id }}>
+        <Link to="/add-track-cover" state={{ track_id: track_id }}>
           <button className="flex items-center px-4 py-2 bg-indigo-900 rounded-full hover:bg-indigo-800 transition">
             <UserPlus className="w-4 h-4 mr-2" /> Change Cover
           </button>

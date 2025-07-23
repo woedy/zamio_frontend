@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Music2Icon, UploadCloud, FileMusic } from 'lucide-react';
+import { Music2Icon, UploadCloud, FileMusic, Plus } from 'lucide-react';
 import { artistID, baseUrl, userToken } from '../../constants';
 import ButtonLoader from '../../common/button_loader';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function UploadTrack() {
   const [trackData, setTrackData] = useState({
@@ -19,16 +19,27 @@ export default function UploadTrack() {
 
   const [albums, setAlbums] = useState([]);
   const [album, setAlbum] = useState('');
-  
-  const navigate = useNavigate();
-  
 
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const [successMessage, setSuccessMessage] = useState(
+    location.state?.successMessage || '',
+  );
+
+  useEffect(() => {
+    // Clear the message after 5 seconds (optional)
+    const timer = setTimeout(() => setSuccessMessage(''), 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${baseUrl}api/artists/get-upload-track-support-data/?artist_id=${encodeURIComponent(artistID)}`,
+        `${baseUrl}api/artists/get-upload-track-support-data/?artist_id=${encodeURIComponent(
+          artistID,
+        )}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -91,8 +102,6 @@ export default function UploadTrack() {
     formData.append('genre_id', genre);
     formData.append('release_date', trackData.releaseDate);
 
-
-
     try {
       const url = baseUrl + 'api/artists/add-track/';
 
@@ -100,10 +109,9 @@ export default function UploadTrack() {
         method: 'POST',
         body: formData,
         headers: {
-            Authorization: `Token ${userToken}`,
-          },
-      },
-    );
+          Authorization: `Token ${userToken}`,
+        },
+      });
 
       const data = await response.json();
       if (!response.ok) {
@@ -119,13 +127,13 @@ export default function UploadTrack() {
         return; // Prevent further code execution
       }
 
-        // Registration successful
-        console.log('Track added successfully');
-        navigate('/all-artist-songs', { state: { successMessage: `${trackData.title} added succesfully.` } });
+      // Registration successful
+      console.log('Track added successfully');
+      navigate('/all-artist-songs', {
+        state: { successMessage: `${trackData.title} added succesfully.` },
+      });
 
-        setLoading(false);
-
-
+      setLoading(false);
     } catch (error) {
       setInputError('error');
       setLoading(false);
@@ -136,7 +144,7 @@ export default function UploadTrack() {
   return (
     <div className="flex-1 flex flex-col p-6">
       <div className="mb-8">
-        <h2 className="text-3xl font-semibold text-emerald-300 flex items-center mb-4">
+        <h2 className="text-3xl font-semibold flex items-center mb-4">
           <Music2Icon className="w-7 h-7 mr-3" /> Upload New Track
         </h2>
         <p className="text-gray-500">Share your latest music with your fans!</p>
@@ -149,13 +157,30 @@ export default function UploadTrack() {
         </div>
       )}
 
+      {successMessage && (
+        <div
+          className="mb-4 rounded-lg border border-green bg-green px-4 py-3 text-white relative"
+          role="alert"
+        >
+          <strong className="font-bold">Success!</strong>
+          <span className="block sm:inline ml-2">{successMessage}</span>
+          <button
+            onClick={() => setSuccessMessage('')}
+            className="absolute top-0 bottom-0 right-0 px-4 py-3 text-green-700"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      )}
+
       <div className="bg-boxdark rounded-lg shadow-xl p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Track Title */}
           <div>
             <label
               htmlFor="title"
-              className="block text-emerald-200 text-sm font-bold mb-2"
+              className="block text-white text-sm font-bold mb-2"
             >
               Track Title <span className="text-red-500">*</span>
             </label>
@@ -171,39 +196,47 @@ export default function UploadTrack() {
             />
           </div>
 
-          <div className="">
-            <label
-              className="block text-emerald-200 text-sm font-bold mb-2"
-              htmlFor="album"
-            >
-              Select Album
-            </label>
+          <div className="flex justify-between gap-3">
+            <div className="w-full">
+              <label
+                className="block text-white text-sm font-bold mb-2"
+                htmlFor="album"
+              >
+                Select Album
+              </label>
 
-            <select
-              id="album"
-              value={album}
-              onChange={(e) => setAlbum(e.target.value)}
-              className="shadow-inner border rounded w-full py-3 px-4 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-graydark"
-            >
-              <option value="">Select Album</option>
+              <select
+                id="album"
+                value={album}
+                onChange={(e) => setAlbum(e.target.value)}
+                className="shadow-inner border rounded w-full py-3 px-4 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-graydark"
+              >
+                <option value="">Select Album</option>
 
-              {albums.map((_album) => (
-                <option
-                  key={_album.id}
-                  value={_album.id}
-                  className="hover:bg-graydark dark:hover:bg-graydark"
-                >
-                  {_album.title}
-                </option>
-              ))}
-            </select>
+                {albums.map((_album) => (
+                  <option
+                    key={_album.id}
+                    value={_album.id}
+                    className="hover:bg-graydark dark:hover:bg-graydark"
+                  >
+                    {_album.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <Link to="/add-album">
+              <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-shadow flex items-center">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Album
+              </button>
+            </Link>
           </div>
-
           {/* Audio File Upload */}
           <div>
             <label
               htmlFor="audioFile"
-              className="block text-emerald-200 text-sm font-bold mb-2"
+              className="block text-white text-sm font-bold mb-2"
             >
               Upload Audio File <span className="text-red-500">*</span>
             </label>
@@ -242,7 +275,7 @@ export default function UploadTrack() {
 
           <div className="">
             <label
-              className="block text-emerald-200 text-sm font-bold mb-2"
+              className="block text-white text-sm font-bold mb-2"
               htmlFor="genre"
             >
               Select Genre
@@ -272,7 +305,7 @@ export default function UploadTrack() {
           <div>
             <label
               htmlFor="releaseDate"
-              className="block text-emerald-200 text-sm font-bold mb-2"
+              className="block text-white text-sm font-bold mb-2"
             >
               Release Date (Optional)
             </label>

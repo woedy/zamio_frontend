@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   List,
   Grid3X3,
@@ -13,76 +13,49 @@ import {
   Search,
   Logs,
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { artistID, baseUrl, baseUrlMedia, userToken } from '../../constants';
-import Pagination from '../../components/Pagination';
+import { Link } from 'react-router-dom';
 
 const ArtistTracksView = () => {
   const [view, setView] = useState('table');
   const [filter, setFilter] = useState('all');
-  const [mockTracks, setMockTracks] = useState([]);
 
-  const [search, setSearch] = useState('');
-  const [orderSongs, setOrderSongs] = useState('');
-  const [page, setPage] = useState(1);
-  const [itemCount, setItemCount] = useState(0);
-  const [totalPages, setTotalPages] = useState(1); // Default to 1 to avoid issues
-  const [loading, setLoading] = useState(false);
+  const mockTracks = [
+    {
+      id: 1,
+      title: 'Freedom Ride',
+      duration: '3:45',
+      released: '2023-10-01',
+      genre: 'Afrobeat',
+      plays: 143,
+      status: 'Approved',
+      cover: '/covers/freedom.jpg',
+    },
+    {
+      id: 2,
+      title: 'Echoes in Kumasi',
+      duration: '4:02',
+      released: '2022-06-15',
+      genre: 'Highlife',
+      plays: 98,
+      status: 'Pending',
+      cover: '/covers/echoes.jpg',
+    },
+    {
+      id: 3,
+      title: 'Soul Fire',
+      duration: '3:33',
+      released: '2024-01-20',
+      genre: 'Hip Hop',
+      plays: 215,
+      status: 'Approved',
+      cover: '/covers/soulfire.jpg',
+    },
+  ];
 
   const filteredTracks = mockTracks.filter((track) => {
     if (filter === 'all') return true;
     return track.status.toLowerCase() === filter;
   });
-  
-
-  const location = useLocation();
-  const [successMessage, setSuccessMessage] = useState(
-    location.state?.successMessage || '',
-  );
-
-  useEffect(() => {
-    // Clear the message after 5 seconds (optional)
-    const timer = setTimeout(() => setSuccessMessage(''), 5000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${baseUrl}api/artists/get-all-tracks/?search=${encodeURIComponent(
-          search,
-        )}&artist_id=${encodeURIComponent(
-          artistID,
-        )}&order_by=${encodeURIComponent(orderSongs)}&page=${page}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Token ${userToken}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      setMockTracks(data.data.tracks);
-      setTotalPages(data.data.pagination.total_pages);
-      setItemCount(data.data.pagination.count);
-      console.log('Total Pages:', data.data.pagination.total_pages);
-      console.log('ppp:', data.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [baseUrl, search, page, userToken, orderSongs]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
@@ -119,11 +92,11 @@ const ArtistTracksView = () => {
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">🎶</h1>
           <div className="flex gap-4">
-            <Link to="/add-track">
-              <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-shadow flex items-center">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Song
-              </button>
+          <Link to="/add-track">
+            <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-shadow flex items-center">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Song
+            </button>
             </Link>
             <select
               onChange={(e) => setFilter(e.target.value)}
@@ -168,18 +141,20 @@ const ArtistTracksView = () => {
               <tbody>
                 {filteredTracks.map((track) => (
                   <tr
-                    key={track.track_id}
+                    key={track.id}
                     className="border-t border-white/10 hover:bg-white/10"
                   >
                     <td className="p-3 font-medium">{track.title}</td>
                     <td className="p-3">{track.duration}</td>
-                    <td className="p-3">{track.release_date}</td>
-                    <td className="p-3">{track.genre_name}</td>
-                    <td className="p-3">{track.airplays}</td>
+                    <td className="p-3">{track.released}</td>
+                    <td className="p-3">{track.genre}</td>
+                    <td className="p-3">{track.plays}</td>
                     <td className="p-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          track.status === 'Approved' ? 'bg-green' : 'bg-yellow'
+                          track.status === 'Approved'
+                            ? 'bg-green-600'
+                            : 'bg-yellow-600'
                         }`}
                       >
                         {track.status}
@@ -189,10 +164,7 @@ const ArtistTracksView = () => {
                     <td>
                       {' '}
                       <div className="flex">
-                        <Link
-                          to="/track-details"
-                          state={{ track_id: track?.track_id }}
-                        >
+                        <Link to={'/track-details'}>
                           <Eye className="w-4 h-4 mr-2" />
                         </Link>
 
@@ -208,46 +180,34 @@ const ArtistTracksView = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {filteredTracks.map((track) => (
-              <Link to="/track-details" state={{ track_id: track?.track_id }}>
-                <div
-                  key={track.track_id}
-                  className="bg-white/5 p-4 rounded-lg border border-white/10"
+              <div
+                key={track.id}
+                className="bg-white/5 p-4 rounded-lg border border-white/10"
+              >
+                <img
+                  src={track.cover}
+                  alt={track.title}
+                  className="w-full h-40 object-cover rounded mb-3"
+                />
+                <h3 className="text-lg font-bold">{track.title}</h3>
+                <p className="text-sm text-gray-300">{track.genre}</p>
+                <p className="text-sm text-gray-400">📆 {track.released}</p>
+                <p className="text-sm mt-2 text-indigo-400">
+                  {track.plays} plays
+                </p>
+                <span
+                  className={`inline-block mt-2 px-2 py-1 rounded-full text-xs font-semibold ${
+                    track.status === 'Approved'
+                      ? 'bg-green-600'
+                      : 'bg-yellow-600'
+                  }`}
                 >
-                  <img
-                    src={`${baseUrlMedia}${track?.cover_art}`}
-                    alt={track.title}
-                    className="w-full h-40 object-cover rounded mb-3"
-                  />
-                  <h3 className="text-lg font-bold">{track.title}</h3>
-                  <p className="text-sm text-gray-300">{track.genre_name}</p>
-                  <p className="text-sm text-gray-400">
-                    📆 {track.release_date}
-                  </p>
-                  <p className="text-sm mt-2 text-indigo-400">
-                    {track.plays} plays
-                  </p>
-                  <span
-                    className={`inline-block mt-2 px-2 py-1 rounded-full text-xs font-semibold ${
-                      track.status === 'Approved' ? 'bg-green' : 'bg-yellow'
-                    }`}
-                  >
-                    {track.status}
-                  </span>
-                </div>
-              </Link>
+                  {track.status}
+                </span>
+              </div>
             ))}
           </div>
         )}
-
-        <Pagination
-          pagination={{
-            page_number: page,
-            total_pages: totalPages,
-            next: page < totalPages ? page + 1 : null,
-            previous: page > 1 ? page - 1 : null,
-          }}
-          setPage={setPage}
-        />
       </div>
     </div>
   );

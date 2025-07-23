@@ -7,6 +7,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [stageName, setStageName] = useState('');
 
   const [email, setEmail] = useState('');
   const [contactNumber, setContactNumber] = useState('');
@@ -41,6 +42,11 @@ const SignUp = () => {
 
     if (lastName === '') {
       setInputError('Last name required.');
+      return;
+    }
+
+    if (stageName === '') {
+      setInputError('Stage name required.');
       return;
     }
 
@@ -79,6 +85,7 @@ const SignUp = () => {
     formData.append('email', email);
     formData.append('first_name', firstName);
     formData.append('last_name', lastName);
+    formData.append('stage_name', stageName);
 
     // Make a POST request to the server
     const url = baseUrl + 'api/accounts/register-artist/';
@@ -168,6 +175,18 @@ const SignUp = () => {
                 placeholder="Last Name"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+       
+            </div>
+            <div className="">
+          
+              <input
+                type="text"
+                name="stageName"
+                placeholder="Stage Name"
+                value={stageName}
+                onChange={(e) => setStageName(e.target.value)}
                 className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>

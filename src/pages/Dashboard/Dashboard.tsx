@@ -1,62 +1,199 @@
-import React, { useState } from 'react';
-import { Play, Music, TrendingUp, MapPin, Activity, Users, Calendar, Settings, Bell, Search, Filter, BarChart3, PieChart, Globe, Zap, Radio, Volume2, Eye, Star, Clock, Target, DollarSign, Download, Share2, Headphones, Heart, Mic, Award, Smartphone } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import {
+  Play,
+  Music,
+  TrendingUp,
+  MapPin,
+  Activity,
+  Users,
+  Calendar,
+  Settings,
+  Bell,
+  Search,
+  Filter,
+  BarChart3,
+  PieChart,
+  Globe,
+  Zap,
+  Radio,
+  Volume2,
+  Eye,
+  Star,
+  Clock,
+  Target,
+  DollarSign,
+  Download,
+  Share2,
+  Headphones,
+  Heart,
+  Mic,
+  Award,
+  Smartphone,
+} from 'lucide-react';
+import { artistID, baseUrl, userToken } from '../../constants';
 
 const Dashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('monthly');
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedRegion, setSelectedRegion] = useState('all');
 
-  // Sample data
-  const totalPlays = 45782;
-  const totalStations = 127;
-  const totalEarnings = 2847.50;
-  const streamingPlays = 98234;
+  const [totalPlays, setTotalPlays] = useState('');
+  const [artistName, setArtistName] = useState('');
+  const [totalStations, setTotalStations] = useState('');
+  const [totalEarnings, setTotalEarnings] = useState('');
+  const [streamingPlays, setStreamingPlays] = useState('');
+  const [topSongs, setTopSongs] = useState([]);
+  const [playsOverTime, setPlaysOverTime] = useState([]);
+  const [stationBreakdown, setStationBreakdown] = useState([]);
+  const [ghanaRegions, setGhanaRegions] = useState([]);
+  const [fanDemographics, setFanDemographics] = useState([]);
+  const [performanceScore, setPerformanceScore] = useState([]);
 
-  const topSongs = [
-    { title: "Midnight Vibes", plays: 8745, earnings: 524.70, confidence: 98, stations: 45 },
-    { title: "Ghana My Home", plays: 7234, earnings: 434.04, confidence: 96, stations: 38 },
-    { title: "Love Letter", plays: 6543, earnings: 392.58, confidence: 94, stations: 32 },
-    { title: "Hustle Hard", plays: 5432, earnings: 325.92, confidence: 92, stations: 28 },
-    { title: "Dance Floor", plays: 4321, earnings: 259.26, confidence: 89, stations: 24 }
+  const [loading, setLoading] = useState(false);
+
+  // Sample data
+  const totalPlays22 = 45782;
+  const totalStations22 = 127;
+  const totalEarnings222 = 2847.5;
+  const streamingPlays22 = 98234;
+
+  const topSongs222 = [
+    {
+      title: 'Midnight Vibes',
+      plays: 8745,
+      earnings: 524.7,
+      confidence: 98,
+      stations: 45,
+    },
+    {
+      title: 'Ghana My Home',
+      plays: 7234,
+      earnings: 434.04,
+      confidence: 96,
+      stations: 38,
+    },
+    {
+      title: 'Love Letter',
+      plays: 6543,
+      earnings: 392.58,
+      confidence: 94,
+      stations: 32,
+    },
+    {
+      title: 'Hustle Hard',
+      plays: 5432,
+      earnings: 325.92,
+      confidence: 92,
+      stations: 28,
+    },
+    {
+      title: 'Dance Floor',
+      plays: 4321,
+      earnings: 259.26,
+      confidence: 89,
+      stations: 24,
+    },
   ];
 
-  const playsOverTime = [
+  const playsOverTime22 = [
     { date: 'Jan', airplay: 3200, streaming: 12400 },
     { date: 'Feb', airplay: 4100, streaming: 15600 },
     { date: 'Mar', airplay: 3800, streaming: 18200 },
     { date: 'Apr', airplay: 5200, streaming: 22100 },
     { date: 'May', airplay: 6100, streaming: 25800 },
-    { date: 'Jun', airplay: 7500, streaming: 28900 }
+    { date: 'Jun', airplay: 7500, streaming: 28900 },
   ];
 
-  const stationBreakdown = [
-    { station: "Peace FM", plays: 1245, percentage: 28.5, region: "Greater Accra" },
-    { station: "Hitz FM", plays: 987, percentage: 22.6, region: "Greater Accra" },
-    { station: "Adom FM", plays: 743, percentage: 17.0, region: "Ashanti" },
-    { station: "Joy FM", plays: 654, percentage: 15.0, region: "Greater Accra" },
-    { station: "Okay FM", plays: 543, percentage: 12.4, region: "Greater Accra" },
-    { station: "Others", plays: 198, percentage: 4.5, region: "Various" }
+  const stationBreakdown22 = [
+    {
+      station: 'Peace FM',
+      plays: 1245,
+      percentage: 28.5,
+      region: 'Greater Accra',
+    },
+    {
+      station: 'Hitz FM',
+      plays: 987,
+      percentage: 22.6,
+      region: 'Greater Accra',
+    },
+    { station: 'Adom FM', plays: 743, percentage: 17.0, region: 'Ashanti' },
+    {
+      station: 'Joy FM',
+      plays: 654,
+      percentage: 15.0,
+      region: 'Greater Accra',
+    },
+    {
+      station: 'Okay FM',
+      plays: 543,
+      percentage: 12.4,
+      region: 'Greater Accra',
+    },
+    { station: 'Others', plays: 198, percentage: 4.5, region: 'Various' },
   ];
 
-  const ghanaRegions = [
-    { region: "Greater Accra", plays: 15234, earnings: 913.04, stations: 45, growth: 15.2 },
-    { region: "Ashanti", plays: 12543, earnings: 752.58, stations: 32, growth: 12.8 },
-    { region: "Northern", plays: 8765, earnings: 525.90, stations: 18, growth: 18.5 },
-    { region: "Western", plays: 6543, earnings: 392.58, stations: 15, growth: 8.9 },
-    { region: "Eastern", plays: 4321, earnings: 259.26, stations: 12, growth: 11.3 },
-    { region: "Central", plays: 3456, earnings: 207.36, stations: 8, growth: 7.2 }
+  const ghanaRegions22 = [
+    {
+      region: 'Greater Accra',
+      plays: 15234,
+      earnings: 913.04,
+      stations: 45,
+      growth: 15.2,
+    },
+    {
+      region: 'Ashanti',
+      plays: 12543,
+      earnings: 752.58,
+      stations: 32,
+      growth: 12.8,
+    },
+    {
+      region: 'Northern',
+      plays: 8765,
+      earnings: 525.9,
+      stations: 18,
+      growth: 18.5,
+    },
+    {
+      region: 'Western',
+      plays: 6543,
+      earnings: 392.58,
+      stations: 15,
+      growth: 8.9,
+    },
+    {
+      region: 'Eastern',
+      plays: 4321,
+      earnings: 259.26,
+      stations: 12,
+      growth: 11.3,
+    },
+    {
+      region: 'Central',
+      plays: 3456,
+      earnings: 207.36,
+      stations: 8,
+      growth: 7.2,
+    },
   ];
 
-  const fanDemographics = [
-    { ageGroup: "18-24", percentage: 35, color: "from-purple-500 to-pink-500" },
-    { ageGroup: "25-34", percentage: 28, color: "from-blue-500 to-purple-500" },
-    { ageGroup: "35-44", percentage: 20, color: "from-green-500 to-blue-500" },
-    { ageGroup: "45-54", percentage: 12, color: "from-yellow-500 to-green-500" },
-    { ageGroup: "55+", percentage: 5, color: "from-orange-500 to-yellow-500" }
+  const fanDemographics222 = [
+    { ageGroup: '18-24', percentage: 35, color: 'from-purple-500 to-pink-500' },
+    { ageGroup: '25-34', percentage: 28, color: 'from-blue-500 to-purple-500' },
+    { ageGroup: '35-44', percentage: 20, color: 'from-green-500 to-blue-500' },
+    {
+      ageGroup: '45-54',
+      percentage: 12,
+      color: 'from-yellow-500 to-green-500',
+    },
+    { ageGroup: '55+', percentage: 5, color: 'from-orange-500 to-yellow-500' },
   ];
 
-  const maxPlays = Math.max(...playsOverTime.map(d => Math.max(d.airplay, d.streaming)));
-  const maxRegionalPlays = Math.max(...ghanaRegions.map(r => r.plays));
+  const maxPlays = Math.max(
+    ...playsOverTime.map((d) => Math.max(d.airplay, d.streaming)),
+  );
+  const maxRegionalPlays = Math.max(...ghanaRegions.map((r) => r.plays));
 
   const getRegionColors = (index) => {
     const colors = [
@@ -65,10 +202,52 @@ const Dashboard = () => {
       'from-yellow-500 to-green-500',
       'from-orange-500 to-yellow-500',
       'from-red-500 to-orange-500',
-      'from-purple-500 to-pink-500'
+      'from-purple-500 to-pink-500',
     ];
     return colors[index % colors.length];
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          baseUrl +
+            `api/artists/dashboard/?artist_id=${artistID}&period=${selectedPeriod}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Token ${userToken}`,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        setArtistName(data.data.artistName);
+        setTotalPlays(data.data.totalPlays);
+        setTotalStations(data.data.totalPlays);
+        setTotalEarnings(data.data.totalEarnings);
+        setStreamingPlays(data.data.streamingPlays);
+
+        setTopSongs(data.data.topSongs);
+        setPlaysOverTime(data.data.playsOverTime);
+        setGhanaRegions(data.data.ghanaRegions);
+        setStationBreakdown(data.data.stationBreakdown);
+        setPerformanceScore(data.data.performanceScore);
+        setFanDemographics(data.data.fanDemographics);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [selectedPeriod]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br ">
@@ -81,15 +260,15 @@ const Dashboard = () => {
                 <Mic className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Kofi Mensah</h1>
+                <h1 className="text-2xl font-bold text-white">{artistName}</h1>
                 <p className="text-gray-300 text-sm">Artist Dashboard</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Search your tracks..."
                   className="bg-white/10 backdrop-blur-md text-white pl-10 pr-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400"
                 />
@@ -133,11 +312,15 @@ const Dashboard = () => {
                 <Radio className="w-6 h-6 text-purple-400" />
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-white">{totalPlays.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-white">
+                  {totalPlays.toLocaleString()}
+                </div>
                 <div className="text-sm text-gray-300">Total Airplay</div>
               </div>
             </div>
-            <div className="text-xs text-purple-400">↑ 23.5% from last month</div>
+            <div className="text-xs text-purple-400">
+              ↑ 23.5% from last month
+            </div>
           </div>
 
           <div className="bg-gradient-to-br from-green/20 to-emerald/20 backdrop-blur-md rounded-2xl p-6 border border-white/10">
@@ -146,11 +329,15 @@ const Dashboard = () => {
                 <DollarSign className="w-6 h-6 text-green-400" />
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-white">₵{totalEarnings.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-white">
+                  ₵{totalEarnings.toLocaleString()}
+                </div>
                 <div className="text-sm text-gray-300">Total Earnings</div>
               </div>
             </div>
-            <div className="text-xs text-green-400">↑ 18.2% from last month</div>
+            <div className="text-xs text-green-400">
+              ↑ 18.2% from last month
+            </div>
           </div>
 
           <div className="bg-gradient-to-br from-blue-500/20 to-cyan-600/20 backdrop-blur-md rounded-2xl p-6 border border-white/10">
@@ -159,7 +346,9 @@ const Dashboard = () => {
                 <Headphones className="w-6 h-6 text-blue-400" />
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-white">{streamingPlays.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-white">
+                  {streamingPlays.toLocaleString()}
+                </div>
                 <div className="text-sm text-gray-300">Streaming Plays</div>
               </div>
             </div>
@@ -172,7 +361,9 @@ const Dashboard = () => {
                 <Globe className="w-6 h-6 text-orange-400" />
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-white">{totalStations}</div>
+                <div className="text-2xl font-bold text-white">
+                  {totalStations}
+                </div>
                 <div className="text-sm text-gray-300">Active Stations</div>
               </div>
             </div>
@@ -208,21 +399,29 @@ const Dashboard = () => {
                     <div className="flex justify-between text-sm">
                       <span className="text-gray">{month.date}</span>
                       <div className="flex space-x-4">
-                        <span className="text-gray">{month.airplay.toLocaleString()}</span>
-                        <span className="text-blue-400">{month.streaming.toLocaleString()}</span>
+                        <span className="text-gray">
+                          {month.airplay.toLocaleString()}
+                        </span>
+                        <span className="text-blue-400">
+                          {month.streaming.toLocaleString()}
+                        </span>
                       </div>
                     </div>
                     <div className="flex space-x-2">
                       <div className="flex-1 bg-white/10 rounded-full h-3 overflow-hidden">
-                        <div 
+                        <div
                           className="h-full bg-gradient-to-r from-purple to-pink rounded-full transition-all duration-500"
-                          style={{ width: `${(month.airplay / maxPlays) * 100}%` }}
+                          style={{
+                            width: `${(month.airplay / maxPlays) * 100}%`,
+                          }}
                         />
                       </div>
                       <div className="flex-1 bg-white/10 rounded-full h-3 overflow-hidden">
-                        <div 
+                        <div
                           className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transition-all duration-500"
-                          style={{ width: `${(month.streaming / maxPlays) * 100}%` }}
+                          style={{
+                            width: `${(month.streaming / maxPlays) * 100}%`,
+                          }}
                         />
                       </div>
                     </div>
@@ -244,19 +443,30 @@ const Dashboard = () => {
               </div>
               <div className="space-y-4">
                 {topSongs.map((song, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors"
+                  >
                     <div className="flex items-center space-x-4">
                       <div className="bg-gradient-to-r from-purple to-pink text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">
                         {index + 1}
                       </div>
                       <div>
-                        <div className="font-semibold text-white">{song.title}</div>
-                        <div className="text-sm text-gray-300">{song.stations} stations • {song.confidence}% accuracy</div>
+                        <div className="font-semibold text-white">
+                          {song.title}
+                        </div>
+                        <div className="text-sm text-gray-300">
+                          {song.stations} stations • {song.confidence}% accuracy
+                        </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-white font-semibold">{song.plays.toLocaleString()}</div>
-                      <div className="text-sm text-green-400">₵{song.earnings.toFixed(2)}</div>
+                      <div className="text-white font-semibold">
+                        {song.plays.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-green-400">
+                        ₵{song.earnings.toFixed(2)}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -270,42 +480,61 @@ const Dashboard = () => {
                   <MapPin className="w-5 h-5 mr-2 text-green-400" />
                   Airplay Map - Ghana Regions
                 </h2>
-                <select 
+                <select
                   className="bg-white/10 backdrop-blur-md text-white px-3 py-2 rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-green-400"
                   value={selectedRegion}
                   onChange={(e) => setSelectedRegion(e.target.value)}
                 >
                   <option value="all">All Regions</option>
-                  {ghanaRegions.map(region => (
-                    <option key={region.region} value={region.region}>{region.region}</option>
+                  {ghanaRegions.map((region) => (
+                    <option key={region.region} value={region.region}>
+                      {region.region}
+                    </option>
                   ))}
                 </select>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {ghanaRegions.map((region, index) => (
-                  <div key={index} className="p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                  <div
+                    key={index}
+                    className="p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors"
+                  >
                     <div className="flex items-center justify-between mb-3">
-                      <div className="font-semibold text-white">{region.region}</div>
-                      <div className="text-sm text-green-400">+{region.growth}%</div>
+                      <div className="font-semibold text-white">
+                        {region.region}
+                      </div>
+                      <div className="text-sm text-green-400">
+                        +{region.growth}%
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-300">Plays</span>
-                        <span className="text-white">{region.plays.toLocaleString()}</span>
+                        <span className="text-white">
+                          {region.plays.toLocaleString()}
+                        </span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-300">Earnings</span>
-                        <span className="text-green-400">₵{region.earnings.toFixed(2)}</span>
+                        <span className="text-green-400">
+                          ₵{region.earnings.toFixed(2)}
+                        </span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-300">Stations</span>
-                        <span className="text-orange-400">{region.stations}</span>
+                        <span className="text-orange-400">
+                          {region.stations}
+                        </span>
                       </div>
                     </div>
                     <div className="mt-3 w-full bg-white/10 rounded-full h-2">
-                      <div 
-                        className={`h-full bg-gradient-to-r ${getRegionColors(index)} rounded-full transition-all duration-500`}
-                        style={{ width: `${(region.plays / maxRegionalPlays) * 100}%` }}
+                      <div
+                        className={`h-full bg-gradient-to-r ${getRegionColors(
+                          index,
+                        )} rounded-full transition-all duration-500`}
+                        style={{
+                          width: `${(region.plays / maxRegionalPlays) * 100}%`,
+                        }}
                       />
                     </div>
                   </div>
@@ -326,14 +555,23 @@ const Dashboard = () => {
               </div>
               <div className="space-y-4">
                 {stationBreakdown.map((station, index) => (
-                  <div key={index} className="p-3 bg-white/5 rounded-xl border border-white/10">
+                  <div
+                    key={index}
+                    className="p-3 bg-white/5 rounded-xl border border-white/10"
+                  >
                     <div className="flex items-center justify-between mb-2">
-                      <div className="font-semibold text-white text-sm">{station.station}</div>
-                      <div className="text-sm text-yellow-400">{station.percentage}%</div>
+                      <div className="font-semibold text-white text-sm">
+                        {station.station}
+                      </div>
+                      <div className="text-sm text-yellow-400">
+                        {station.percentage}%
+                      </div>
                     </div>
-                    <div className="text-xs text-gray-300 mb-2">{station.region} • {station.plays.toLocaleString()} plays</div>
+                    <div className="text-xs text-gray-300 mb-2">
+                      {station.region} • {station.plays.toLocaleString()} plays
+                    </div>
                     <div className="w-full bg-white/10 rounded-full h-2">
-                      <div 
+                      <div
                         className="h-full bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full"
                         style={{ width: `${station.percentage}%` }}
                       />
@@ -356,10 +594,12 @@ const Dashboard = () => {
                   <div key={index} className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-300">{demo.ageGroup}</span>
-                      <span className="text-white font-semibold">{demo.percentage}%</span>
+                      <span className="text-white font-semibold">
+                        {demo.percentage}%
+                      </span>
                     </div>
                     <div className="w-full bg-white/10 rounded-full h-2">
-                      <div 
+                      <div
                         className={`h-full bg-gradient-to-r ${demo.color} rounded-full transition-all duration-500`}
                         style={{ width: `${demo.percentage}%` }}
                       />
@@ -378,20 +618,28 @@ const Dashboard = () => {
                 </h2>
               </div>
               <div className="text-center space-y-4">
-                <div className="text-4xl font-bold text-white">8.7</div>
+                <div className="text-4xl font-bold text-white">
+                  {performanceScore.overall}
+                </div>
                 <div className="text-sm text-gray-300">Out of 10</div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-300">Airplay Growth</span>
-                    <span className="text-green-400">9.2</span>
+                    <span className="text-green-400">
+                      {performanceScore.airplayGrowth}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-300">Regional Reach</span>
-                    <span className="text-blue-400">8.8</span>
+                    <span className="text-blue-400">
+                      {performanceScore.RegionalReach}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-300">Fan Engagement</span>
-                    <span className="text-purple-400">8.1</span>
+                    <span className="text-purple-400">
+                      {performanceScore.fanEngagement}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -399,7 +647,9 @@ const Dashboard = () => {
 
             {/* Quick Actions */}
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
+              <h2 className="text-xl font-bold text-white mb-4">
+                Quick Actions
+              </h2>
               <div className="space-y-3">
                 <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-shadow flex items-center justify-center">
                   <Download className="w-4 h-4 mr-2" />
