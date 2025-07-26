@@ -23,7 +23,7 @@ import TrackContributors from './pages/MusicUploadManagement/Contributors';
 import AddContributor from './pages/MusicUploadManagement/AddContributors';
 import MatchLogViewer from './pages/PlaylogsMatchLog/FullDetectionTable';
 import ArtistAnalyticsPage from './pages/PlatformAnalytics/ArtistAnalyticsPage';
-import RoyaltyDashboard from './pages/Royalty&PaymentsOversight/ViewPaymentHistory';
+import RoyaltyDashboard from './pages/PaymentsOversight/ViewPaymentHistory';
 import NotificationCenter from './pages/NotificationCenter/NotificationCenter';
 import LegalCompliancePage from './pages/LegalCompliance/LegalComplains';
 import EducationSupport from './pages/TechSupport/HelpSupport';

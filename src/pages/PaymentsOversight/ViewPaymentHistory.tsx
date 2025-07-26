@@ -104,12 +104,7 @@ export default function RoyaltyDashboard() {
                 GHS {wallet?.sources?.streaming?.toFixed(2)}
               </span>
             </div>
-            <div>
-              🌍 Distro:{' '}
-              <span className="font-medium">
-                GHS {wallet?.sources?.distro?.toFixed(2)}
-              </span>
-            </div>
+   
           </div>
         </div>
 
