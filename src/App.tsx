@@ -28,14 +28,22 @@ import NotificationCenter from './pages/NotificationCenter/NotificationCenter';
 import LegalCompliancePage from './pages/LegalCompliance/LegalComplains';
 import EducationSupport from './pages/TechSupport/HelpSupport';
 import FeedbackReviewsPage from './pages/FeedbackReview/FeedbackReview';
-import ArtistProfilePage from './pages/ArtistManagement/ArtistProfile';
+import ArtistProfilePage from './pages/Profile/ArtistProfile';
 import AddAlbum from './pages/MusicUploadManagement/AddAlbum';
+import CompleteProfile from './pages/Authentication/Onboarding/CompleteProfile';
+import SocialMediaInfo from './pages/Authentication/Onboarding/SocialMediaInfo';
+import PaymentInfo from './pages/Authentication/Onboarding/PaymentInfo';
+import Publisher from './pages/Authentication/Onboarding/Publisher';
 
 const hiddenOnRoutes = [
   '/',
   '/sign-up',
   '/verify-email',
   '/sign-in',
+  '/onboarding/profile',
+  '/onboarding/social-media',
+  '/onboarding/payment',
+  '/onboarding/publisher',
   '/forgot-password',
   '/new-password-reset',
   '/confirm-password-otp',
@@ -260,6 +268,42 @@ function App() {
             <>
               <PageTitle title="Verify Email | ZamIO-Artists" />
               <VerifyEmail />
+            </>
+          }
+        />
+        <Route
+          path="/onboarding/profile"
+          element={
+            <>
+              <PageTitle title="Complete Profile | ZamIO-Artists" />
+              <CompleteProfile />
+            </>
+          }
+        />
+        <Route
+          path="/onboarding/social-media"
+          element={
+            <>
+              <PageTitle title="Update Social Media | ZamIO-Artists" />
+              <SocialMediaInfo />
+            </>
+          }
+        />
+        <Route
+          path="/onboarding/payment"
+          element={
+            <>
+              <PageTitle title="Update Social Media | ZamIO-Artists" />
+              <PaymentInfo />
+            </>
+          }
+        />
+        <Route
+          path="/onboarding/publisher"
+          element={
+            <>
+              <PageTitle title="Add publisher | ZamIO-Artists" />
+              <Publisher />
             </>
           }
         />

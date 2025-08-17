@@ -497,7 +497,7 @@ const ArtistProfilePage = () => {
                 <Music className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">RoyaltyGH</h1>
+                <h1 className="text-2xl font-bold text-white">{artistData.name}</h1>
                 <p className="text-gray-300 text-sm">Artist Dashboard</p>
               </div>
             </div>
@@ -648,6 +648,13 @@ const ArtistProfilePage = () => {
             label="Analytics"
             icon={BarChart3}
             isActive={activeTab === 'analytics'}
+            onClick={setActiveTab}
+          />
+          <TabButton
+            id="publisher"
+            label="Publisher"
+            icon={Music}
+            isActive={activeTab === 'publisher'}
             onClick={setActiveTab}
           />
         </div>
@@ -914,6 +921,39 @@ const ArtistProfilePage = () => {
               </div>
             </div>
           )}
+          {/* Publisher Tab */}
+          {activeTab === 'publisher' && (
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+              <h2 className="text-xl font-bold text-white mb-6 flex items-center">
+                <Music className="w-5 h-5 mr-2 text-cyan-400" />
+                PublisheR Info
+              </h2>
+              <p className="text-sm text-gray-400 mb-4">
+                [Future: Add D3.js / Chart.js / Recharts visualizations here]
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-4 bg-white/5 rounded-xl text-white">
+                  <h3 className="font-semibold mb-2">Percentage Split</h3>
+                  <p>
+                    {
+                      songs.sort((a, b) => b.totalPlays - a.totalPlays)[0]
+                        ?.title
+                    }
+                  </p>
+                </div>
+                <div className="p-4 bg-white/5 rounded-xl text-white">
+                  <h3 className="font-semibold mb-2">Change Publisher</h3>
+                  <p>
+                    {
+                      songs.sort((a, b) => b.totalEarnings - a.totalEarnings)[0]
+                        ?.title
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        
         </div>
       </div>
     </div>

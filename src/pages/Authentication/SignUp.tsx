@@ -22,7 +22,6 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -90,17 +89,15 @@ const SignUp = () => {
     // Make a POST request to the server
     const url = baseUrl + 'api/accounts/register-artist/';
 
-
-
     try {
       setLoading(true);
       const response = await fetch(url, {
         method: 'POST',
         body: formData,
       });
-    
+
       const data = await response.json();
-    
+
       if (!response.ok) {
         // Display the first error message from the errors object
         if (data.errors) {
@@ -111,18 +108,16 @@ const SignUp = () => {
         }
         return; // Prevent further code execution
       }
-    
+
       // Registration successful
       console.log('User registered successfully');
       navigate('/verify-email', { state: { email } });
-
-  } catch (error) {
+    } catch (error) {
       console.error('Error registering user:', error.message);
       setInputError('Failed to register');
     } finally {
       setLoading(false);
     }
-    
   };
 
   const validateEmail = (email) => {
@@ -138,9 +133,6 @@ const SignUp = () => {
 
   return (
     <div className="h-screen bg-gradient-to-br from-[#1a2a6c] via-[#b21f1f] to-[#fdbb2d] flex items-center justify-center">
-
-
-
       <div className="w-full max-w-2xl px-6">
         <h2 className="text-5xl font-bold text-white text-center mb-8">
           ZamIO
@@ -177,10 +169,8 @@ const SignUp = () => {
                 onChange={(e) => setLastName(e.target.value)}
                 className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-       
             </div>
             <div className="">
-          
               <input
                 type="text"
                 name="stageName"
@@ -274,7 +264,7 @@ const SignUp = () => {
 
           {/* Link to Register */}
           <p className=" text-white mt-6 text-center">
-           Already have an account?{' '}
+            Already have an account?{' '}
             <Link
               to="/sign-in"
               className="underline text-blue-400 hover:text-blue-200"
