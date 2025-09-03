@@ -89,10 +89,12 @@ const SignIn = () => {
             break;
           case 'track':
             navigate('/dashboard', { replace: true });
+            window.location.reload();
             break;
           case 'done':
           default:
             navigate('/dashboard', { replace: true });
+            window.location.reload();
 
         }
       }
@@ -134,7 +136,7 @@ const SignIn = () => {
 
 
   return (
-    <div className="min-h-screen flex items-start justify-center bg-gradient-to-tr from-[#131833] via-[#1b1745] to-[#2a215c] px-4 pt-20 pb-10">
+    <div className="min-h-screen flex items-start justify-center bg-gradient-to-br from-[#1a2a6c] via-[#b21f1f] to-[#fdbb2d] px-4 pt-20 pb-10">
       <div className="w-full max-w-xl">
         {successMessage && (
           <div
@@ -164,7 +166,7 @@ const SignIn = () => {
           </div>
         )}
 
-        <div className="relative w-full rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.35)] p-10">
+        <div className="relative w-full rounded-2xl border border-white/10 bg-white/10 backdrop-blur-md shadow-[0_10px_40px_rgba(0,0,0,0.35)] p-10">
           <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10" />
           <h2 className="text-3xl md:text-4xl font-semibold text-white text-center mb-8 flex items-center justify-center gap-3">
             <span className="text-3xl">🎧</span>
@@ -181,7 +183,7 @@ const SignIn = () => {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-12 px-5 rounded-xl bg-white/15 border border-white/20 text-white placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
 
             {/* Password Input + Show/Hide */}
@@ -194,7 +196,7 @@ const SignIn = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 px-5 pr-12 rounded-xl bg-white/15 border border-white/20 text-white placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-6 py-4 pr-12 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
               <button
                 type="button"
@@ -231,7 +233,7 @@ const SignIn = () => {
             ) : (
               <button
                 type="submit"
-                className="w-full h-12 bg-[#2563eb] hover:bg-[#1e55c9] transition text-white font-semibold rounded-xl mt-6 shadow-[0_6px_20px_rgba(37,99,235,0.35)]"
+                className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-4 rounded-lg mt-6"
               >
                 Login
               </button>

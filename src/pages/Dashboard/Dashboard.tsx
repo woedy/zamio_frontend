@@ -5,7 +5,6 @@ import {
   TrendingUp,
   MapPin,
   Activity,
-  Users,
   Calendar,
   Settings,
   Bell,
@@ -24,8 +23,6 @@ import {
   DollarSign,
   Download,
   Share2,
-  Headphones,
-  Heart,
   Mic,
   Award,
   Smartphone,
@@ -42,12 +39,11 @@ const Dashboard = () => {
   const [artistName, setArtistName] = useState('');
   const [totalStations, setTotalStations] = useState('');
   const [totalEarnings, setTotalEarnings] = useState('');
-  const [streamingPlays, setStreamingPlays] = useState('');
   const [topSongs, setTopSongs] = useState([]);
   const [playsOverTime, setPlaysOverTime] = useState([]);
   const [stationBreakdown, setStationBreakdown] = useState([]);
   const [ghanaRegions, setGhanaRegions] = useState([]);
-  const [fanDemographics, setFanDemographics] = useState([]);
+  // Removed fan demographics state per request
   const [performanceScore, setPerformanceScore] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -56,7 +52,6 @@ const Dashboard = () => {
   const totalPlays22 = 45782;
   const totalStations22 = 127;
   const totalEarnings222 = 2847.5;
-  const streamingPlays22 = 98234;
 
   const topSongs222 = [
     {
@@ -97,12 +92,12 @@ const Dashboard = () => {
   ];
 
   const playsOverTime22 = [
-    { date: 'Jan', airplay: 3200, streaming: 12400 },
-    { date: 'Feb', airplay: 4100, streaming: 15600 },
-    { date: 'Mar', airplay: 3800, streaming: 18200 },
-    { date: 'Apr', airplay: 5200, streaming: 22100 },
-    { date: 'May', airplay: 6100, streaming: 25800 },
-    { date: 'Jun', airplay: 7500, streaming: 28900 },
+    { date: 'Jan', airplay: 3200 },
+    { date: 'Feb', airplay: 4100 },
+    { date: 'Mar', airplay: 3800 },
+    { date: 'Apr', airplay: 5200 },
+    { date: 'May', airplay: 6100 },
+    { date: 'Jun', airplay: 7500 },
   ];
 
   const stationBreakdown22 = [
@@ -179,21 +174,9 @@ const Dashboard = () => {
     },
   ];
 
-  const fanDemographics222 = [
-    { ageGroup: '18-24', percentage: 35, color: 'from-purple-500 to-pink-500' },
-    { ageGroup: '25-34', percentage: 28, color: 'from-blue-500 to-purple-500' },
-    { ageGroup: '35-44', percentage: 20, color: 'from-green-500 to-blue-500' },
-    {
-      ageGroup: '45-54',
-      percentage: 12,
-      color: 'from-yellow-500 to-green-500',
-    },
-    { ageGroup: '55+', percentage: 5, color: 'from-orange-500 to-yellow-500' },
-  ];
+  // Removed fan demographics sample data per request
 
-  const maxPlays = Math.max(
-    ...playsOverTime.map((d) => Math.max(d.airplay, d.streaming)),
-  );
+  const maxPlays = Math.max(...playsOverTime.map((d) => d.airplay));
   const maxRegionalPlays = Math.max(...ghanaRegions.map((r) => r.plays));
 
   const getRegionColors = (index) => {
@@ -209,7 +192,9 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+
     const fetchData = async () => {
+      
       setLoading(true);
       try {
         const response = await fetch(
@@ -230,16 +215,14 @@ const Dashboard = () => {
         const data = await response.json();
         setArtistName(data.data.artistName);
         setTotalPlays(data.data.totalPlays);
-        setTotalStations(data.data.totalPlays);
+        setTotalStations(data.data.totalStations);
         setTotalEarnings(data.data.totalEarnings);
-        setStreamingPlays(data.data.streamingPlays);
 
         setTopSongs(data.data.topSongs);
         setPlaysOverTime(data.data.playsOverTime);
         setGhanaRegions(data.data.ghanaRegions);
         setStationBreakdown(data.data.stationBreakdown);
         setPerformanceScore(data.data.performanceScore);
-        setFanDemographics(data.data.fanDemographics);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -341,21 +324,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-500/20 to-cyan-600/20 backdrop-blur-md rounded-2xl p-6 border border-white/10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-blue-500/20 p-3 rounded-xl">
-                <Headphones className="w-6 h-6 text-blue-400" />
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-white">
-                  {streamingPlays.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-300">Streaming Plays</div>
-              </div>
-            </div>
-            <div className="text-xs text-blue-400">↑ 45.7% from last month</div>
-          </div>
-
           <div className="bg-gradient-to-br from-orange-500/20 to-red-600/20 backdrop-blur-md rounded-2xl p-6 border border-white/10">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-orange-500/20 p-3 rounded-xl">
@@ -388,10 +356,6 @@ const Dashboard = () => {
                     <div className="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
                     <span className="text-sm text-gray-300">Airplay</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
-                    <span className="text-sm text-gray-300">Streaming</span>
-                  </div>
                 </div>
               </div>
               <div className="space-y-4">
@@ -399,32 +363,13 @@ const Dashboard = () => {
                   <div key={index} className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray">{month.date}</span>
-                      <div className="flex space-x-4">
-                        <span className="text-gray">
-                          {month.airplay.toLocaleString()}
-                        </span>
-                        <span className="text-blue-400">
-                          {month.streaming.toLocaleString()}
-                        </span>
-                      </div>
+                      <span className="text-gray">{month.airplay.toLocaleString()}</span>
                     </div>
-                    <div className="flex space-x-2">
-                      <div className="flex-1 bg-white/10 rounded-full h-3 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-purple to-pink rounded-full transition-all duration-500"
-                          style={{
-                            width: `${(month.airplay / maxPlays) * 100}%`,
-                          }}
-                        />
-                      </div>
-                      <div className="flex-1 bg-white/10 rounded-full h-3 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transition-all duration-500"
-                          style={{
-                            width: `${(month.streaming / maxPlays) * 100}%`,
-                          }}
-                        />
-                      </div>
+                    <div className="flex-1 bg-white/10 rounded-full h-3 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-purple to-pink rounded-full transition-all duration-500"
+                        style={{ width: `${(month.airplay / maxPlays) * 100}%` }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -582,33 +527,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Fan Demographics */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-white flex items-center">
-                  <Users className="w-5 h-5 mr-2 text-pink-400" />
-                  Fan Demographics
-                </h2>
-              </div>
-              <div className="space-y-4">
-                {fanDemographics.map((demo, index) => (
-                  <div key={index} className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-300">{demo.ageGroup}</span>
-                      <span className="text-white font-semibold">
-                        {demo.percentage}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-white/10 rounded-full h-2">
-                      <div
-                        className={`h-full bg-gradient-to-r ${demo.color} rounded-full transition-all duration-500`}
-                        style={{ width: `${demo.percentage}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* Fan Demographics removed per request */}
 
             {/* Performance Score */}
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">

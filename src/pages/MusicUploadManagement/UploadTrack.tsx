@@ -75,15 +75,22 @@ export default function UploadTrack() {
 
   const handleAudioFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setTrackData({
-        ...trackData,
-        audioFile: file,
-        audioFileName: file.name,
-      });
-    } else {
+    if (!file) {
       setTrackData({ ...trackData, audioFile: null, audioFileName: null });
+      return;
     }
+    const allowed = ['audio/mpeg', 'audio/wav'];
+    const maxBytes = 50 * 1024 * 1024; // 50MB
+    if (!allowed.includes(file.type)) {
+      setInputError('Only MP3 or WAV files are allowed.');
+      return;
+    }
+    if (file.size > maxBytes) {
+      setInputError('File too large. Max 50MB.');
+      return;
+    }
+    setInputError(null);
+    setTrackData({ ...trackData, audioFile: file, audioFileName: file.name });
   };
 
   const handleSubmit = async (e) => {
@@ -130,8 +137,14 @@ export default function UploadTrack() {
 
       // Registration successful
       console.log('Track added successfully');
-      navigate('/all-artist-songs', {
-        state: { successMessage: `${trackData.title} added succesfully.` },
+      const created = data?.data || {};
+      const nextTrackId = created.track_id || created.db_id; // prefer public track_id
+      // Step to cover art upload next
+      navigate('/add-track-cover', {
+        state: {
+          successMessage: `${trackData.title} added succesfully.`,
+          track_id: nextTrackId,
+        },
       });
 
       setLoading(false);
@@ -174,6 +187,28 @@ export default function UploadTrack() {
           </button>
         </div>
       )}
+
+      {/* Stepper */}
+      <div className="mb-4 flex items-center space-x-4 text-sm">
+        {[
+          { label: 'Upload', active: true },
+          { label: 'Cover Art' },
+          { label: 'Contributors' },
+          { label: 'Review' },
+        ].map((s, i) => (
+          <div key={i} className="flex items-center">
+            <div
+              className={`w-7 h-7 rounded-full flex items-center justify-center mr-2 ${
+                s.active ? 'bg-emerald-600 text-white' : 'bg-white/10 text-gray-300'
+              }`}
+            >
+              {i + 1}
+            </div>
+            <span className={`mr-4 ${s.active ? 'text-white' : 'text-gray-400'}`}>{s.label}</span>
+            {i < 3 && <div className="w-10 h-px bg-white/20 mr-4" />}
+          </div>
+        ))}
+      </div>
 
       <div className="bg-boxdark rounded-lg shadow-xl p-8">
         <form onSubmit={handleSubmit} className="space-y-6">

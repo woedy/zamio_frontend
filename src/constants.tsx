@@ -1,6 +1,7 @@
-export const baseUrl = "http://localhost:8000/";
-export const baseUrlMedia = "http://localhost:8000";
-export const baseWsUrl = "ws://localhost:8000/";
+// Prefer Vite env overrides; default to proxy-friendly paths in dev
+export const baseUrl = (import.meta as any)?.env?.VITE_API_BASE || "/";
+export const baseUrlMedia = (import.meta as any)?.env?.VITE_MEDIA_BASE || "";
+export const baseWsUrl = (import.meta as any)?.env?.VITE_WS_BASE || "ws://localhost:8000/";
 
 //export const baseUrl = "http://92.112.194.239:6161/";
 //export const baseUrlMedia = "http://92.112.194.239:6161";

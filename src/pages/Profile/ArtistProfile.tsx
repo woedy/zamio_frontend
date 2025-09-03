@@ -24,6 +24,21 @@ import {
   Verified,
 } from 'lucide-react';
 import { baseUrl, baseUrlMedia, userToken } from '../../constants';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  Legend,
+} from 'recharts';
 import { getArtistId } from '../../lib/auth';
 
 const ArtistProfilePage = () => {
@@ -38,6 +53,9 @@ const ArtistProfilePage = () => {
   const [songs, setSongs] = useState([]);
   const [royaltyHistory, setRoyaltyHistory] = useState([]);
   const [playLogs, setPlayLogs] = useState([]);
+  const [analytics, setAnalytics] = useState<{ playsOverTime?: any[]; topStations?: any[]; topSongs?: any[]; period?: string }>({});
+  const [analyticsPeriod, setAnalyticsPeriod] = useState('monthly');
+  const [publisherInfo, setPublisherInfo] = useState<any>(null);
 
   // Sample artist data
   const artistData22 = {
@@ -160,7 +178,6 @@ const ArtistProfilePage = () => {
       station: 'Peace FM',
       date: '2024-01-15 14:30',
       duration: '3:45',
-      confidence: 98,
       earnings: 0.6,
     },
     {
@@ -169,7 +186,6 @@ const ArtistProfilePage = () => {
       station: 'Hitz FM',
       date: '2024-01-15 12:15',
       duration: '4:12',
-      confidence: 96,
       earnings: 0.6,
     },
     {
@@ -178,7 +194,6 @@ const ArtistProfilePage = () => {
       station: 'Joy FM',
       date: '2024-01-15 10:45',
       duration: '3:28',
-      confidence: 94,
       earnings: 0.6,
     },
     {
@@ -187,7 +202,6 @@ const ArtistProfilePage = () => {
       station: 'Adom FM',
       date: '2024-01-15 09:20',
       duration: '3:45',
-      confidence: 92,
       earnings: 0.6,
     },
     {
@@ -196,7 +210,6 @@ const ArtistProfilePage = () => {
       station: 'Okay FM',
       date: '2024-01-15 08:10',
       duration: '4:12',
-      confidence: 89,
       earnings: 0.6,
     },
   ];
@@ -224,6 +237,7 @@ const ArtistProfilePage = () => {
         setSongs(data.data.songs);
         setRoyaltyHistory(data.data.royaltyHistory);
         setPlayLogs(data.data.playLogs);
+        setPublisherInfo(data.data.publisherInfo);
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -234,6 +248,34 @@ const ArtistProfilePage = () => {
 
     fetchData();
   }, []);
+
+  // Fetch analytics (plays over time, top stations, top songs)
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await fetch(
+          baseUrl + `api/artists/analytics/?artist_id=${getArtistId()}&period=${analyticsPeriod}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Token ${userToken}`,
+            },
+          },
+        );
+        if (!response.ok) throw new Error('Failed to load analytics');
+        const payload = await response.json();
+        setAnalytics({
+          playsOverTime: payload?.data?.playsOverTime || [],
+          topStations: payload?.data?.topStations || [],
+          topSongs: payload?.data?.topSongs || [],
+          period: payload?.data?.period || analyticsPeriod,
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchAnalytics();
+  }, [analyticsPeriod]);
 
   const TabButton = ({ id, label, icon: Icon, isActive, onClick }) => (
     <button
@@ -823,7 +865,6 @@ const ArtistProfilePage = () => {
                       <th className="px-4 py-3">Station</th>
                       <th className="px-4 py-3">Date & Time</th>
                       <th className="px-4 py-3">Duration</th>
-                      <th className="px-4 py-3">Confidence</th>
                       <th className="px-4 py-3">Earnings</th>
                     </tr>
                   </thead>
@@ -834,7 +875,6 @@ const ArtistProfilePage = () => {
                         <td className="px-4 py-2">{log.station}</td>
                         <td className="px-4 py-2">{log.date}</td>
                         <td className="px-4 py-2">{log.duration}</td>
-                        <td className="px-4 py-2">{log.confidence}%</td>
                         <td className="px-4 py-2 text-green-400 font-medium">
                           ₵{log.earnings.toFixed(2)}
                         </td>
@@ -892,64 +932,142 @@ const ArtistProfilePage = () => {
 
           {/* Analytics Tab */}
           {activeTab === 'analytics' && (
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h2 className="text-xl font-bold text-white mb-6 flex items-center">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 space-y-6">
+              <h2 className="text-xl font-bold text-white flex items-center">
                 <BarChart3 className="w-5 h-5 mr-2 text-cyan-400" />
                 Analytics Overview
               </h2>
-              <p className="text-sm text-gray-400 mb-4">
-                [Future: Add D3.js / Chart.js / Recharts visualizations here]
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-4 bg-white/5 rounded-xl text-white">
-                  <h3 className="font-semibold mb-2">Most Played Song</h3>
-                  <p>
-                    {
-                      songs.sort((a, b) => b.totalPlays - a.totalPlays)[0]
-                        ?.title
-                    }
-                  </p>
+
+              {/* Period Selector */}
+              <div className="flex space-x-2 bg-white/10 backdrop-blur-md p-1 rounded-lg border border-white/20 w-fit">
+                {['daily', 'weekly', 'monthly', 'all-time'].map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setAnalyticsPeriod(p)}
+                    className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+                      analyticsPeriod === p
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                        : 'text-gray-300 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                  </button>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Plays Over Time */}
+                <div className="p-4 bg-white/5 rounded-xl text-white lg:col-span-2">
+                  <h3 className="font-semibold mb-3">Plays Over Time</h3>
+                  <div className="h-56">
+                    {analytics.playsOverTime?.length ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={analytics.playsOverTime} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                          <defs>
+                            <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#22c55e" stopOpacity={0.05} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                          <XAxis dataKey="date" stroke="#9CA3AF" />
+                          <YAxis stroke="#9CA3AF" />
+                          <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.85)', border: '1px solid #ffffff20', borderRadius: 8, color: '#fff' }} />
+                          <Area type="monotone" dataKey="count" stroke="#22c55e" strokeWidth={2} fillOpacity={1} fill="url(#colorCount)" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <div className="h-full flex items-center justify-center text-gray-400">No data yet</div>
+                    )}
+                  </div>
                 </div>
+
+                {/* Top Stations */}
                 <div className="p-4 bg-white/5 rounded-xl text-white">
-                  <h3 className="font-semibold mb-2">Top Earning Song</h3>
-                  <p>
-                    {
-                      songs.sort((a, b) => b.totalEarnings - a.totalEarnings)[0]
-                        ?.title
-                    }
-                  </p>
+                  <h3 className="font-semibold mb-3">Top Stations</h3>
+                  <div className="h-56">
+                    {analytics.topStations?.length ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie data={analytics.topStations} dataKey="percent" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                            {analytics.topStations.map((_, i) => (
+                              <Cell key={`cell-${i}`} fill={["#8B5CF6", "#F59E0B", "#10B981", "#EF4444"][i % 4]} />
+                            ))}
+                          </Pie>
+                          <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.85)', border: '1px solid #ffffff20', borderRadius: 8, color: '#fff' }} />
+                          <Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <div className="h-full flex items-center justify-center text-gray-400">No data yet</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Songs */}
+              <div className="p-4 bg-white/5 rounded-xl text-white">
+                <h3 className="font-semibold mb-3">Top Songs</h3>
+                <div className="h-72">
+                  {analytics.topSongs?.length ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={analytics.topSongs} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                        <XAxis dataKey="title" stroke="#9CA3AF" interval={0} angle={-20} textAnchor="end" height={60} />
+                        <YAxis stroke="#9CA3AF" />
+                        <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.85)', border: '1px solid #ffffff20', borderRadius: 8, color: '#fff' }} />
+                        <Bar dataKey="plays" fill="#60A5FA" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-full flex items-center justify-center text-gray-400">No data yet</div>
+                  )}
                 </div>
               </div>
             </div>
           )}
           {/* Publisher Tab */}
           {activeTab === 'publisher' && (
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h2 className="text-xl font-bold text-white mb-6 flex items-center">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 space-y-6">
+              <h2 className="text-xl font-bold text-white flex items-center">
                 <Music className="w-5 h-5 mr-2 text-cyan-400" />
-                PublisheR Info
+                Publisher
               </h2>
-              <p className="text-sm text-gray-400 mb-4">
-                [Future: Add D3.js / Chart.js / Recharts visualizations here]
-              </p>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-4 bg-white/5 rounded-xl text-white">
-                  <h3 className="font-semibold mb-2">Percentage Split</h3>
-                  <p>
-                    {
-                      songs.sort((a, b) => b.totalPlays - a.totalPlays)[0]
-                        ?.title
-                    }
-                  </p>
+                <div className="p-4 bg-white/5 rounded-xl text-white space-y-2">
+                  <div className="text-sm text-gray-300">Company</div>
+                  <div className="text-lg font-semibold">{publisherInfo?.companyName || 'None'}</div>
+                  <div className="text-sm text-gray-300">Location</div>
+                  <div className="text-white">{publisherInfo?.location || '—'}</div>
+                  <div className="text-sm text-gray-300">Verified</div>
+                  <div className="text-white">{publisherInfo?.verified ? 'Yes' : 'No'}</div>
                 </div>
-                <div className="p-4 bg-white/5 rounded-xl text-white">
-                  <h3 className="font-semibold mb-2">Change Publisher</h3>
-                  <p>
-                    {
-                      songs.sort((a, b) => b.totalEarnings - a.totalEarnings)[0]
-                        ?.title
-                    }
-                  </p>
+                <div className="p-4 bg-white/5 rounded-xl text-white space-y-2">
+                  <div className="text-sm text-gray-300">Writer Split</div>
+                  <div className="text-lg font-semibold">{publisherInfo?.writerSplit ?? 0}%</div>
+                  <div className="text-sm text-gray-300">Publisher Split</div>
+                  <div className="text-lg font-semibold">{publisherInfo?.publisherSplit ?? 0}%</div>
+                </div>
+              </div>
+
+              <div className="p-4 bg-white/5 rounded-xl text-white">
+                <h3 className="font-semibold mb-3">Contributors & Splits (per song)</h3>
+                <div className="space-y-3">
+                  {songs.map((song) => (
+                    <div key={song.id} className="border border-white/10 rounded-lg p-3">
+                      <div className="text-white font-medium mb-2">{song.title}</div>
+                      {(song.contributors || []).map((c, i) => (
+                        <div key={i} className="flex items-center justify-between text-sm text-gray-300">
+                          <span>{c.name} • {c.role}</span>
+                          <span className="text-purple-300 font-semibold">{c.percentage}%</span>
+                        </div>
+                      ))}
+                      {!song.contributors?.length && (
+                        <div className="text-gray-400">No contributors listed</div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

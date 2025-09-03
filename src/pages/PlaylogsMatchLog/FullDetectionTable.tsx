@@ -149,104 +149,103 @@ const MatchLogViewer = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+        <div className="bg-white/10 rounded-2xl p-6 border border-white/20" aria-busy={loading}>
           <h2 className="text-xl font-bold text-white mb-6 flex items-center">
             <Activity className="w-5 h-5 mr-2 text-blue-400" />
             {activeTab === 'playlogs'
               ? 'Detailed Play Logs'
               : 'Detailed Match Logs'}
           </h2>
-
-          <div className="overflow-auto rounded-xl">
-            <table className="min-w-full text-sm text-left text-gray-300">
-              <thead className="text-xs uppercase bg-white/5 text-gray-400">
-                <tr>
-                  <th className="px-4 py-3">Song</th>
-                  <th className="px-4 py-3">Station</th>
-                  <th className="px-4 py-3">Matched at</th>
-                  {activeTab === 'playlogs' ? (
-                    <>
-                      <th className="px-4 py-3">End Date & Time</th>
-                      <th className="px-4 py-3">Duration</th>
-                      <th className="px-4 py-3">Avg. Confidence</th>
-                      <th className="px-4 py-3">Earnings</th>
-                      <th className="px-4 py-3">Status</th>
-                    </>
-                  ) : (
-                    <th className="px-4 py-3">Confidence</th>
-                  )}
-                </tr>
-              </thead>
-              <tbody className="bg-white/5 divide-y divide-white/10">
-                {Array.isArray(currentLogs) && currentLogs.length > 0 ? (
-                  currentLogs.map((log) => (
-                    <tr key={log.id}>
-                      <td className="px-4 py-2 text-white">
-                        {log.track_title || log.song}
-                      </td>
-                      <td className="px-4 py-2">
-                        {log.station_name || log.station}
-                      </td>
-                      <td className="px-4 py-2">
-                      {log.matched_at
-                              ? `${log.matched_at}`
-                              : `${log.start_time}`}
-                      </td>
-                      {activeTab === 'playlogs' ? (
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <svg className="animate-spin h-6 w-6 text-white mr-3" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              </svg>
+              <span className="text-white">Loading logs...</span>
+            </div>
+          ) : (
+            <>
+              <div className="overflow-auto rounded-xl">
+                <table className="min-w-full text-sm text-left text-gray-300">
+                  <thead className="text-xs uppercase bg-white/5 text-gray-400">
+                    <tr>
+                      <th className="px-4 py-3">Song</th>
+                      <th className="px-4 py-3">Station</th>
+                      <th className="px-4 py-3">Matched at</th>
+                      {activeTab === 'playlogs' && (
                         <>
-                          <td className="px-4 py-2">{log.stop_time || '-'}</td>
-                          <td className="px-4 py-2">{log.duration || '-'}</td>
-                          <td className="px-4 py-2">
-                            {log.avg_confidence_score
-                              ? `${log.avg_confidence_score}%`
-                              : '-'}
-                          </td>
-                          <td className="px-4 py-2 text-green-400 font-medium">
-                            {log.royalty_amount
-                              ? `₵${log.royalty_amount}`
-                              : '₵0.00'}
-                          </td>
-                          <td className="px-4 py-2">{log.status || '-'}</td>
+                          <th className="px-4 py-3">End Date & Time</th>
+                          <th className="px-4 py-3">Duration</th>
+                          <th className="px-4 py-3">Earnings</th>
+                          <th className="px-4 py-3">Status</th>
                         </>
-                      ) : (
-                        <td className="px-4 py-2">
-                          {log.avg_confidence_score ? `${log.avg_confidence_score}%` : '-'}
-                        </td>
                       )}
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={activeTab === 'playlogs' ? 8 : 4}
-                      className="text-center text-white py-6"
-                    >
-                      No logs found for this view.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  </thead>
+                  <tbody className="bg-white/5 divide-y divide-white/10">
+                    {Array.isArray(currentLogs) && currentLogs.length > 0 ? (
+                      currentLogs.map((log) => (
+                        <tr key={log.id}>
+                          <td className="px-4 py-2 text-white">
+                            {log.track_title || log.song}
+                          </td>
+                          <td className="px-4 py-2">
+                            {log.station_name || log.station}
+                          </td>
+                          <td className="px-4 py-2">
+                          {log.matched_at
+                                  ? `${log.matched_at}`
+                                  : `${log.start_time}`}
+                          </td>
+                          {activeTab === 'playlogs' && (
+                            <>
+                              <td className="px-4 py-2">{log.stop_time || '-'}</td>
+                              <td className="px-4 py-2">{log.duration || '-'}</td>
+                              <td className="px-4 py-2 text-green-400 font-medium">
+                                {log.royalty_amount
+                                  ? `₵${log.royalty_amount}`
+                                  : '₵0.00'}
+                              </td>
+                              <td className="px-4 py-2">{log.status || '-'}</td>
+                            </>
+                          )}
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={activeTab === 'playlogs' ? 7 : 3}
+                          className="text-center text-white py-6"
+                        >
+                          No logs found for this view.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
 
-          {/* Pagination */}
-          <div className="flex justify-end mt-4 space-x-2">
-            <button
-              disabled={currentPage <= 1}
-              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-              className="bg-white/10 text-white px-4 py-2 rounded disabled:opacity-40"
-            >
-              Prev
-            </button>
-            <span className="text-white px-2">{`Page ${currentPage} of ${totalPages}`}</span>
-            <button
-              disabled={currentPage >= totalPages}
-              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-              className="bg-white/10 text-white px-4 py-2 rounded disabled:opacity-40"
-            >
-              Next
-            </button>
-          </div>
+              {/* Pagination */}
+              <div className="flex justify-end mt-4 space-x-2">
+                <button
+                  disabled={currentPage <= 1}
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  className="bg-white/10 text-white px-4 py-2 rounded disabled:opacity-40"
+                >
+                  Prev
+                </button>
+                <span className="text-white px-2">{`Page ${currentPage} of ${totalPages}`}</span>
+                <button
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                  className="bg-white/10 text-white px-4 py-2 rounded disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

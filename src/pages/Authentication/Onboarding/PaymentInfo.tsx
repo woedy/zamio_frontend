@@ -66,12 +66,15 @@ const PaymentInfo = () => {
             break;
           case 'track':
             navigate('/dashboard', { replace: true });
+            window.location.reload();
             break;
           case 'done':
             navigate('/dashboard', { replace: true });
+            window.location.reload();
             break;
         default:
             navigate('/dashboard', { replace: true }); // fallback
+            window.location.reload();
 
         }
     
@@ -99,7 +102,7 @@ const PaymentInfo = () => {
           </div>
         )}
 
-        <div className="bg-white/10 p-10 rounded-2xl backdrop-blur-md w-full border border-white/20 shadow-xl">
+        <div className="bg-white/10 p-10 rounded-2xl backdrop-blur-md w-full border border-white/10 shadow-xl">
           <h2 className="text-4xl font-bold text-white text-center mb-4">
             🎧 Payment Info
           </h2>
@@ -115,7 +118,7 @@ const PaymentInfo = () => {
                 placeholder="Momo No."
                 value={momo}
                 onChange={(e) => setMomo(e.target.value)}
-                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
             <div className="">

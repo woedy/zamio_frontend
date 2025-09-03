@@ -67,9 +67,9 @@ const CoverUploader = () => {
   
       // Success
       console.log('Cover added successfully');
-      navigate('/track-details', {
+      navigate('/add-track-contributor', {
         state: {
-          successMessage: `Cover added succesfully.`,
+          successMessage: `Cover added succesfully. Now add contributors.`,
           track_id: `${track_id}`,
         },
       });
@@ -84,9 +84,30 @@ const CoverUploader = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
- 
+
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Stepper */}
+        <div className="mb-4 flex items-center space-x-4 text-sm">
+          {[
+            { label: 'Upload' },
+            { label: 'Cover Art', active: true },
+            { label: 'Contributors' },
+            { label: 'Review' },
+          ].map((s, i) => (
+            <div key={i} className="flex items-center">
+              <div
+                className={`w-7 h-7 rounded-full flex items-center justify-center mr-2 ${
+                  s.active ? 'bg-emerald-600 text-white' : 'bg-white/10 text-gray-700'
+                }`}
+              >
+                {i + 1}
+              </div>
+              <span className={`mr-4 ${s.active ? 'text-gray-900' : 'text-gray-600'}`}>{s.label}</span>
+              {i < 3 && <div className="w-10 h-px bg-gray-300 mr-4" />}
+            </div>
+          ))}
+        </div>
       {inputError && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-3">
           <strong className="font-bold">Error!</strong>

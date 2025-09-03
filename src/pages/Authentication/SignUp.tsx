@@ -135,7 +135,7 @@ const SignUp = () => {
           </div>
         )}
 
-        <div className="bg-white/10 p-10 rounded-2xl backdrop-blur-md w-full border border-white/20 shadow-xl">
+        <div className="bg-white/10 p-10 rounded-2xl backdrop-blur-md w-full border border-white/10 shadow-xl">
           <h2 className="text-4xl font-bold text-white text-center mb-8">
             🎧 Artist Register
           </h2>
@@ -148,7 +148,7 @@ const SignUp = () => {
                 placeholder="First Name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
 
               <input
@@ -157,7 +157,7 @@ const SignUp = () => {
                 placeholder="Last Name"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
             <div className="">
@@ -178,7 +178,7 @@ const SignUp = () => {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
 
             {/* Phone Input */}
@@ -188,7 +188,7 @@ const SignUp = () => {
               placeholder="Phone"
               value={contactNumber}
               onChange={(e) => setContactNumber(e.target.value)}
-              className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
 
             <div className="grid grid-cols-2 gap-2">
@@ -199,7 +199,7 @@ const SignUp = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-6 py-4 pr-12 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-6 py-4 pr-12 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <button
                   type="button"
@@ -222,7 +222,7 @@ const SignUp = () => {
                   placeholder="Confirm Password"
                   value={password2}
                   onChange={(e) => setPassword2(e.target.value)}
-                  className="w-full px-6 py-4 pr-12 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-6 py-4 pr-12 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <button
                   type="button"

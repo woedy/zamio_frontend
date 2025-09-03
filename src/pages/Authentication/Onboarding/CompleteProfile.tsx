@@ -97,12 +97,15 @@ const CompleteProfile = () => {
           break;
         case 'track':
           navigate('/dashboard', { replace: true });
+          window.location.reload();
           break;
         case 'done':
           navigate('/dashboard', { replace: true });
+          window.location.reload();
           break;
         default:
           navigate('/dashboard', { replace: true }); // fallback
+          window.location.reload();
 
       }
     } catch (error) {
@@ -127,7 +130,7 @@ const CompleteProfile = () => {
           </div>
         )}
 
-        <div className="bg-white/10 p-10 rounded-2xl backdrop-blur-md w-full border border-white/20 shadow-xl">
+        <div className="bg-white/10 p-10 rounded-2xl backdrop-blur-md w-full border border-white/10 shadow-xl">
           <h2 className="text-4xl font-bold text-white text-center mb-4">
             🎧 Complete Profile
           </h2>
@@ -142,7 +145,7 @@ const CompleteProfile = () => {
                 placeholder="Enter Bio"
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
             <div className="">
@@ -152,7 +155,7 @@ const CompleteProfile = () => {
                 placeholder="Country"
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
-                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
             <div className="">
@@ -162,7 +165,7 @@ const CompleteProfile = () => {
                 placeholder="Region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-6 py-4 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
 

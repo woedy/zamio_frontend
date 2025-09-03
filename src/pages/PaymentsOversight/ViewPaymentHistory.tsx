@@ -14,13 +14,11 @@ import {
 
 type WalletSources = {
   radio?: number;
-  streaming?: number;
   distro?: number;
 };
 
 type RoyaltyRates = {
   radio?: string;
-  streaming?: string;
 };
 
 type WalletHistoryItem = {
@@ -30,11 +28,19 @@ type WalletHistoryItem = {
   status: string;
 };
 
+type RoyaltyPoint = {
+  month: string;
+  revenue: number;
+  plays: number;
+  stations: number;
+};
+
 type WalletType = {
   total?: number;
   sources?: WalletSources;
   royaltyRates?: RoyaltyRates;
   history?: WalletHistoryItem[];
+  royaltyBreakdown?: RoyaltyPoint[];
 };
 
 export default function RoyaltyDashboard() {
@@ -42,25 +48,19 @@ export default function RoyaltyDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [wallet, setWallet] = useState<WalletType | null>(null);
 
-  const revenueData = [
-    { month: 'Jan', revenue: 45000, artists: 320, stations: 15 },
-    { month: 'Feb', revenue: 52000, artists: 380, stations: 18 },
-    { month: 'Mar', revenue: 61000, artists: 445, stations: 22 },
-    { month: 'Apr', revenue: 58000, artists: 510, stations: 25 },
-    { month: 'May', revenue: 72000, artists: 580, stations: 28 },
-    { month: 'Jun', revenue: 85000, artists: 650, stations: 32 },
-    { month: 'Jul', revenue: 95000, artists: 720, stations: 35 },
-  ];
+  const [royaltyData, setRoyaltyData] = useState<RoyaltyPoint[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const { data } = await api.get('api/bank-account/artist/payments/', {
+        const { data } = await api.get('api/bank/artist/payments/', {
           params: { artist_id: getArtistId() },
         });
-        setWallet(data?.data?.wallet ?? null);
+        const wallet = data?.data?.wallet ?? null;
+        setWallet(wallet);
+        setRoyaltyData(wallet?.royaltyBreakdown ?? []);
       } catch (err: any) {
         console.error('Error fetching data:', err);
         setError('Failed to load payment data. Please try again.');
@@ -97,9 +97,9 @@ export default function RoyaltyDashboard() {
               </span>
             </div>
             <div>
-              🎧 Streaming:{' '}
+              🏷️ Distro:{' '}
               <span className="font-medium">
-                GHS {wallet?.sources?.streaming?.toFixed(2)}
+                GHS {(wallet?.sources?.distro ?? 0).toFixed(2)}
               </span>
             </div>
    
@@ -118,7 +118,7 @@ export default function RoyaltyDashboard() {
           </div>
           <div className="bg-slate-700 h-40 flex items-center justify-center text-white/60 rounded">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData}>
+              <AreaChart data={royaltyData}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
@@ -150,7 +150,7 @@ export default function RoyaltyDashboard() {
                 />
                 <Area
                   type="monotone"
-                  dataKey="artists"
+                  dataKey="plays"
                   stroke="#8B5CF6"
                   strokeWidth={2}
                   fillOpacity={1}
@@ -233,12 +233,7 @@ export default function RoyaltyDashboard() {
               📻 Radio Play:{' '}
               <span className="font-medium">{wallet?.royaltyRates?.radio}</span>
             </li>
-            <li>
-              🎧 Streaming Play:{' '}
-              <span className="font-medium">
-                {wallet?.royaltyRates?.streaming}
-              </span>
-            </li>
+            {/* Streaming rates removed: scope is radio royalties only */}
             <li className="text-white/60 text-xs">
               * Rates may vary by platform and region. Data based on verified
               sources.

@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
-  MapPin, BarChartBig, PieChart, Music2, Smartphone
+  MapPin, BarChartBig, PieChart as PieChartIcon, Music2, Smartphone
 } from "lucide-react";
+import {
+  ResponsiveContainer,
+  PieChart as RPieChart,
+  Pie,
+  Cell,
+  Tooltip as ReTooltip,
+} from "recharts";
 import { baseUrl, userToken } from "../../constants";
 import { getArtistId } from "../../lib/auth";
 import RadioMap from "../../RadioMap";
@@ -34,11 +41,30 @@ const topSongs22 = [
 ];
 
 
+const DEFAULT_TOP_STATIONS = [
+  {
+    name: "South Joannaberg FM",
+    percent: 33,
+  },
+  {
+    name: "Joshuafort FM",
+    percent: 33,
+  },
+  {
+    name: "Christineborough FM",
+    percent: 33,
+  },
+  {
+    name: "Others",
+    percent: 1,
+  },
+];
+
 const ArtistAnalyticsPage = () => {
     const [loading, setLoading] = useState(false);
 
     const [dummyPlays, setDummyPlays] = useState([]);
-    const [topStations, setTopStations] = useState([]);
+    const [topStations, setTopStations] = useState(DEFAULT_TOP_STATIONS);
     const [topSongs, setTopSongs] = useState([]);
 
     const radioStations = [
@@ -72,7 +98,12 @@ const ArtistAnalyticsPage = () => {
     
           const data = await response.json();
           setDummyPlays(data.data.playsOverTime);
-          setTopStations(data.data.setTopStations);
+          // Prefer backend-provided stations; fallback to provided payload key; else default
+          if (data?.data?.topStations?.length) {
+            setTopStations(data.data.topStations);
+          } else if (data?.data?.setTopStations?.length) {
+            setTopStations(data.data.setTopStations);
+          }
           setTopSongs(data.data.topSongs);
     
       
@@ -137,11 +168,36 @@ const ArtistAnalyticsPage = () => {
         {/* Station Breakdown */}
         <section className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
-            <PieChart className="text-pink-400" /> Station Breakdown
+            <PieChartIcon className="text-pink-400" /> Station Breakdown
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             <div className="bg-slate-800 h-48 rounded-lg flex items-center justify-center text-gray-400">
-              [ 🍩 Pie Chart Placeholder ]
+              <ResponsiveContainer width="100%" height="100%">
+                <RPieChart>
+                  <Pie
+                    data={topStations}
+                    dataKey="percent"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={70}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {topStations.map((_, index) => {
+                      const COLORS = [
+                        "#F472B6", // pink-400
+                        "#60A5FA", // blue-400
+                        "#34D399", // emerald-400
+                        "#FBBF24", // amber-400
+                        "#A78BFA", // violet-400
+                        "#38BDF8", // sky-400
+                      ];
+                      return <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />;
+                    })}
+                  </Pie>
+                  <ReTooltip formatter={(value: number) => `${value}%`} />
+                </RPieChart>
+              </ResponsiveContainer>
             </div>
             <ul className="text-sm text-gray-300 space-y-1">
               {topStations?.map((station, i) => (
@@ -168,15 +224,6 @@ const ArtistAnalyticsPage = () => {
           </ul>
         </section>
 
-        {/* Mobile/Streaming Analytics */}
-        <section className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-stroke dark:border-white/10">
-          <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
-            <Smartphone className="text-teal-300" /> Streaming Plays (Coming Soon)
-          </h2>
-          <div className="text-sm text-gray-400">
-            Fan streaming stats will be available soon when integration with Apple Music and Boomplay is live.
-          </div>
-        </section>
 
 
       </div>

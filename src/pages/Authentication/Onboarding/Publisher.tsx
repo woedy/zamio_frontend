@@ -78,12 +78,15 @@ const Publisher = () => {
           break;
         case 'track':
           navigate('/dashboard', { replace: true });
+          window.location.reload();
           break;
         case 'done':
           navigate('/dashboard', { replace: true });
+          window.location.reload();
           break;
         default:
           navigate('/dashboard', { replace: true }); // fallback
+          window.location.reload();
       }
     } catch (error: any) {
       const data = error?.response?.data;
@@ -129,7 +132,7 @@ const Publisher = () => {
           </div>
         )}
 
-        <div className="bg-white/10 p-10 rounded-2xl backdrop-blur-md w-full border border-white/20 shadow-xl">
+        <div className="bg-white/10 p-10 rounded-2xl backdrop-blur-md w-full border border-white/10 shadow-xl">
           <h2 className="text-4xl font-bold text-white text-center mb-4">
             🎧 Add Publisher
           </h2>
@@ -145,7 +148,7 @@ const Publisher = () => {
                 value={publisherId}
                 onChange={(e) => setPublisherId(e.target.value)}
                 disabled={isChecked}
-                className="w-full px-6 py-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-6 py-3 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
                 <option value="" className="bg-[#1a2a6c]">-- Choose a publisher --</option>
                 {publishers.map((p) => (
@@ -160,7 +163,7 @@ const Publisher = () => {
                 type="checkbox"
                 checked={isChecked}
                 onChange={handleChange}
-                className=" px-2 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className=" px-2 py-2 bg-white/20 backdrop-blur-md border border-white/10 rounded-lg text-white placeholder-white  focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
 
               <p className="text-white ml-3">Self-Published</p>
