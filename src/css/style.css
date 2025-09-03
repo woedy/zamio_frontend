@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply font-satoshi font-normal text-base text-body bg-whiten relative z-1;
+    @apply font-satoshi font-normal text-base text-body bg-whiten dark:text-bodydark dark:bg-boxdark-2 relative z-1;
   }
 }
 
@@ -12,6 +12,25 @@
 }
 
 @layer utilities {
+  /* Light-mode readability overrides for legacy dark-only classes */
+  body:not(.dark) .text-white { color: #0f172a !important; }
+  body:not(.dark) .text-white\/90 { color: rgba(15, 23, 42, 0.9) !important; }
+  body:not(.dark) .text-white\/80 { color: rgba(15, 23, 42, 0.8) !important; }
+  body:not(.dark) .text-white\/70 { color: rgba(15, 23, 42, 0.7) !important; }
+  body:not(.dark) .text-white\/60 { color: rgba(15, 23, 42, 0.6) !important; }
+  body:not(.dark) .text-white\/50 { color: rgba(15, 23, 42, 0.5) !important; }
+  body:not(.dark) .text-white\/40 { color: rgba(15, 23, 42, 0.4) !important; }
+  body:not(.dark) .text-gray { color: #64748b !important; }
+
+  /* Placeholder fixes where white placeholder is used on white bg */
+  body:not(.dark) .placeholder-white\/40::placeholder { color: #94a3b8 !important; }
+  body:not(.dark) .placeholder-white\/50::placeholder { color: #94a3b8 !important; }
+  body:not(.dark) .placeholder-white\/60::placeholder { color: #64748b !important; }
+
+  /* Border visibility where white borders were used */
+  body:not(.dark) .border-white\/10 { border-color: #E2E8F0 !important; }
+  body:not(.dark) .border-white\/20 { border-color: #E2E8F0 !important; }
+
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
