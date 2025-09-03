@@ -2,7 +2,7 @@
 FROM node:16
 
 # Set the working directory.
-WORKDIR /zamio_artist_pro
+WORKDIR /zamio_frontend_pro
 
 # Copy package.json and package-lock.json (if available).
 COPY package*.json ./

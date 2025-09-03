@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../../constants';
+import api from '../../../lib/api';
 import ButtonLoader from '../../../common/button_loader';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
@@ -58,35 +59,23 @@ const NewPassword = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(url, {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Display the first error message from the errors object
-        if (data.errors) {
-          const errorMessages = Object.values(data.errors).flat();
-          setInputError(errorMessages.join('\n'));
-        } else {
-          setInputError(data.message || 'Failed to reset password');
-        }
-        return; // Prevent further code execution
+      const response = await api.post(url, formData);
+      if (response.status >= 200 && response.status < 300) {
+        console.log('Password reset successfully');
+        navigate('/sign-in', {
+          state: {
+            successMessage: 'Password reset successfully! You can now log in.',
+          },
+        });
       }
-
-      // Registration successful
-      console.log('Password reset successfully');
-
-      navigate('/sign-in', {
-        state: {
-          successMessage: 'Password reset successfully! You can now log in.',
-        },
-      });
-    } catch (error) {
-      console.error('Error registering user:', error.message);
-      setInputError('Failed to reset password');
+    } catch (error: any) {
+      const data = error?.response?.data;
+      if (data?.errors) {
+        const errorMessages = Object.values(data.errors).flat() as string[];
+        setInputError(errorMessages.join('\n'));
+      } else {
+        setInputError(data?.message || 'Failed to reset password');
+      }
     } finally {
       setLoading(false);
     }

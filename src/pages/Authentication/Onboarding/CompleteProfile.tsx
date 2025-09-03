@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { artistID, baseUrl } from '../../../constants';
+import { baseUrl } from '../../../constants';
+import { getArtistId } from '../../../lib/auth';
+import api from '../../../lib/api';
 import ButtonLoader from '../../../common/button_loader';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
@@ -65,41 +67,20 @@ const CompleteProfile = () => {
   
     // Prepare FormData for file upload
     const formData = new FormData();
-    formData.append('artist_id', artistID);
+    formData.append('artist_id', getArtistId());
     formData.append('bio', bio);
     formData.append('country', country);
     formData.append('region', region);
     formData.append('photo', selectedFile);
   
-    const url = baseUrl + 'api/accounts/complete-artist-profile/';
+    const url = 'api/accounts/complete-artist-profile/';
   
     try {
       setLoading(true);
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Token ${localStorage.getItem('token')}`,
-        },
-        body: formData,
+      const response = await api.post(url, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        if (data.errors) {
-          const errorMessages = Object.values(data.errors).flat();
-          setInputError(errorMessages.join('\n'));
-        } else {
-          setInputError(data.message || 'Failed to update profile.');
-        }
-        return;
-      }
-  
-      // ✅ Successful submission
-      console.log('Profile updated successfully');
-  
-      // Move to next onboarding step (backend returns this)
-      const nextStep = data.data.next_step;
+      const nextStep = response.data?.data?.next_step;
   
       switch (nextStep) {
         case 'profile':
@@ -115,15 +96,13 @@ const CompleteProfile = () => {
           navigate('/onboarding/publisher');
           break;
         case 'track':
-          navigate('/onboarding/track');
+          navigate('/dashboard', { replace: true });
           break;
         case 'done':
-          navigate('/dashboard');
-          window.location.reload();
+          navigate('/dashboard', { replace: true });
           break;
         default:
-          navigate('/dashboard'); // fallback
-          window.location.reload();
+          navigate('/dashboard', { replace: true }); // fallback
 
       }
     } catch (error) {
@@ -234,14 +213,26 @@ const CompleteProfile = () => {
             )}
           </form>
 
-          {/* Link to Register */}
+          {/* Skip to next step and persist */}
           <p className=" text-white mt-6 text-center">
-            <Link
-              to="/update-social-media"
+            <button
               className="underline text-white hover:text-blue-200"
+              onClick={async (e) => {
+                e.preventDefault();
+                try {
+                  await api.post('api/accounts/skip-artist-onboarding/', {
+                    artist_id: getArtistId(),
+                    step: 'social-media',
+                  });
+                } catch (err) {
+                  // non-blocking
+                } finally {
+                  navigate('/onboarding/social-media');
+                }
+              }}
             >
               Skip
-            </Link>
+            </button>
           </p>
         </div>
       </div>

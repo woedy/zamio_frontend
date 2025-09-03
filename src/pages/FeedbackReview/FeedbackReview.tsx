@@ -32,7 +32,7 @@ export default function FeedbackReviewsPage() {
 
       
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
+    <div className="min-h-screen bg-whiten text-black dark:bg-slate-950 dark:text-white px-6 py-10">
       <div className="max-w-6xl mx-auto space-y-10">
         
         {/* Header */}
@@ -44,7 +44,7 @@ export default function FeedbackReviewsPage() {
         {/* Review Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {reviews.map((r, idx) => (
-            <div key={idx} className="bg-slate-800 p-5 rounded-lg shadow-sm">
+            <div key={idx} className="bg-white dark:bg-slate-800 p-5 rounded-lg shadow-sm border border-stroke dark:border-white/10">
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-semibold">{r.track}</h2>
                 <div className="flex items-center gap-1 text-yellow-400">
@@ -62,7 +62,7 @@ export default function FeedbackReviewsPage() {
         </div>
 
         {/* Sentiment Summary (Placeholder) */}
-        <div className="bg-slate-800 p-6 rounded-lg mt-10">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg mt-10 border border-stroke dark:border-white/10">
           <h3 className="text-lg font-semibold mb-4">💬 Sentiment Summary</h3>
           <div className="flex gap-6 text-sm text-white/80">
             <div>👍 Positive: <span className="text-white font-bold">67%</span></div>

@@ -22,14 +22,14 @@ const EducationSupport = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
+    <div className="min-h-screen bg-whiten text-black dark:bg-slate-950 dark:text-white px-6 py-10">
       <div className="max-w-5xl mx-auto space-y-10">
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <HelpCircle className="text-indigo-400" /> Education & Support
         </h1>
 
         {/* FAQ Section */}
-        <section className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
+        <section className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-4">📚 FAQ & Help Articles</h2>
           {faqs.map((item, index) => (
             <div key={index} className="border-b border-white/10 py-4">
@@ -48,7 +48,7 @@ const EducationSupport = () => {
         </section>
 
         {/* Contact Support Form */}
-        <section className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
+        <section className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-4">📨 Contact Support</h2>
           <form className="space-y-4">
             <input
@@ -94,7 +94,7 @@ const EducationSupport = () => {
         </section>
 
         {/* Educational Charts */}
-        <section className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
+        <section className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <BarChart3 className="text-green-400" /> Genre Balance Insights
           </h2>

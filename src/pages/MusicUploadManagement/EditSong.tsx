@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Music2Icon, UploadCloud, FileMusic } from 'lucide-react';
-import { artistID, baseUrl, userToken } from '../../constants';
+import { baseUrl, userToken } from '../../constants';
+import { getArtistId } from '../../lib/auth';
 import ButtonLoader from '../../common/button_loader';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -29,7 +30,7 @@ export default function EditTractDetails() {
     try {
       const response = await fetch(
         `${baseUrl}api/artists/get-edit-track-support-data/?artist_id=${encodeURIComponent(
-          artistID,
+          getArtistId(),
         )}&track_id=${encodeURIComponent(track_id)}`,
         {
           headers: {
@@ -71,7 +72,7 @@ export default function EditTractDetails() {
 
     const formData = new FormData();
     formData.append('track_id', track_id);
-    formData.append('artist_id', artistID);
+    formData.append('artist_id', getArtistId());
     formData.append('title', trackData.title);
     formData.append('album_id', trackData.album);
     formData.append('genre_id', trackData.genre);

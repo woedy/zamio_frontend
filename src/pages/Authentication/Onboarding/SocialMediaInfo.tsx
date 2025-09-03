@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { artistID, baseUrl } from '../../../constants';
+import { baseUrl } from '../../../constants';
+import { getArtistId } from '../../../lib/auth';
+import api from '../../../lib/api';
 import ButtonLoader from '../../../common/button_loader';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
@@ -50,41 +52,20 @@ const SocialMediaInfo = () => {
     
       // Prepare FormData for file upload
       const formData = new FormData();
-      formData.append('artist_id', artistID);
+      formData.append('artist_id', getArtistId());
       formData.append('facebook', facebook);
       formData.append('twitter', twitter);
       formData.append('instagram', instagram);
       formData.append('youtube', youtube);
     
-      const url = baseUrl + 'api/accounts/complete-artist-social/';
+      const url = 'api/accounts/complete-artist-social/';
     
       try {
         setLoading(true);
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            Authorization: `Token ${localStorage.getItem('token')}`,
-          },
-          body: formData,
+        const response = await api.post(url, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
-    
-        const data = await response.json();
-    
-        if (!response.ok) {
-          if (data.errors) {
-            const errorMessages = Object.values(data.errors).flat();
-            setInputError(errorMessages.join('\n'));
-          } else {
-            setInputError(data.message || 'Failed to update social.');
-          }
-          return;
-        }
-    
-        // ✅ Successful submission
-        console.log('Social updated successfully');
-    
-        // Move to next onboarding step (backend returns this)
-        const nextStep = data.data.next_step;
+        const nextStep = response.data?.data?.next_step;
     
         switch (nextStep) {
           case 'profile':
@@ -99,16 +80,14 @@ const SocialMediaInfo = () => {
           case 'publisher':
             navigate('/onboarding/publisher');
             break;
-          case 'track':
-            navigate('/onboarding/track');
+        case 'track':
+            navigate('/dashboard', { replace: true });
             break;
-          case 'done':
-            navigate('/dashboard');
-            window.location.reload();
+        case 'done':
+            navigate('/dashboard', { replace: true });
             break;
-          default:
-            navigate('/dashboard'); // fallback
-            window.location.reload();
+        default:
+            navigate('/dashboard', { replace: true }); // fallback
         }
     
       } catch (error) {
@@ -211,15 +190,26 @@ const SocialMediaInfo = () => {
             )}
           </form>
 
-          {/* Link to Register */}
+          {/* Skip to next step and persist */}
           <p className=" text-white mt-6 text-center">
-         
-            <Link
-              to="/update-payment-info"
+            <button
               className="underline text-white hover:text-blue-200"
+              onClick={async (e) => {
+                e.preventDefault();
+                try {
+                  await api.post('api/accounts/skip-artist-onboarding/', {
+                    artist_id: getArtistId(),
+                    step: 'payment',
+                  });
+                } catch (err) {
+                  // non-blocking
+                } finally {
+                  navigate('/onboarding/payment');
+                }
+              }}
             >
               Skip
-            </Link>
+            </button>
           </p>
         </div>
       </div>

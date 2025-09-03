@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Search, UserPlus, Music } from 'lucide-react'; // Added relevant icons
 import { Link, useLocation } from 'react-router-dom';
-import { artistID, baseUrl, userToken } from '../../constants';
+import { baseUrl, userToken } from '../../constants';
+import { getArtistId } from '../../../lib/auth';
 import Pagination from '../../components/Pagination';
 
 export default function SongManager() {
@@ -33,7 +34,7 @@ export default function SongManager() {
         `${baseUrl}api/artists/get-all-tracks/?search=${encodeURIComponent(
           search,
         )}&artist_id=${encodeURIComponent(
-          artistID,
+          getArtistId(),
         )}&filter=${encodeURIComponent(filterSongs)}&page=${page}`,
         {
           headers: {

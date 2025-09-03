@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import ButtonLoader from '../../common/button_loader';
 import { UploadCloud } from 'lucide-react';
-import { artistID, baseUrl, userToken } from '../../constants';
+import { baseUrl, userToken } from '../../constants';
+import { getArtistId } from '../../lib/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const CoverUploader = () => {
@@ -38,7 +39,7 @@ const CoverUploader = () => {
   
     const formData = new FormData();
     formData.append('track_id', track_id);
-    formData.append('artist_id', artistID);
+    formData.append('artist_id', getArtistId());
     formData.append('photo', selectedFile); // <-- correct usage
   
     try {

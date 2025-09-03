@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   MapPin, BarChartBig, PieChart, Music2, Smartphone
 } from "lucide-react";
-import { artistID, baseUrl, userToken } from "../../constants";
+import { baseUrl, userToken } from "../../constants";
+import { getArtistId } from "../../lib/auth";
 import RadioMap from "../../RadioMap";
 
 
@@ -56,7 +57,7 @@ const ArtistAnalyticsPage = () => {
         setLoading(true);
         try {
           const response = await fetch(
-            baseUrl + `api/artists/analytics/?artist_id=${artistID}`,
+            baseUrl + `api/artists/analytics/?artist_id=${getArtistId()}`,
             {
               headers: {
                 'Content-Type': 'application/json',
@@ -88,7 +89,7 @@ const ArtistAnalyticsPage = () => {
 
   
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
+    <div className="min-h-screen bg-whiten text-black dark:bg-slate-950 dark:text-white px-6 py-10">
       <div className="max-w-6xl mx-auto space-y-10">
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <BarChartBig className="text-indigo-400" /> Airplay & Streaming Analytics
@@ -97,7 +98,7 @@ const ArtistAnalyticsPage = () => {
         <div className="grid grid-cols-2 gap-4">
 
         {/* Airplay Map */}
-        <section className="bg-white/5 p-6 rounded-2xl border border-white/10">
+        <section className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
             <MapPin className="text-green-400" /> Airplay Map – Ghana
           </h2>
@@ -108,7 +109,7 @@ const ArtistAnalyticsPage = () => {
 
 
         {/* Plays Over Time */}
-        <section className="bg-white/5 p-6 rounded-2xl border border-white/10">
+        <section className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
             <BarChartBig className="text-cyan-400" /> Plays Over Time
           </h2>
@@ -134,7 +135,7 @@ const ArtistAnalyticsPage = () => {
 
 
         {/* Station Breakdown */}
-        <section className="bg-white/5 p-6 rounded-2xl border border-white/10">
+        <section className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
             <PieChart className="text-pink-400" /> Station Breakdown
           </h2>
@@ -153,7 +154,7 @@ const ArtistAnalyticsPage = () => {
         </section>
 
         {/* Top Songs Played */}
-        <section className="bg-white/5 p-6 rounded-2xl border border-white/10">
+        <section className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
             <Music2 className="text-yellow-400" /> Top Songs Played
           </h2>
@@ -168,7 +169,7 @@ const ArtistAnalyticsPage = () => {
         </section>
 
         {/* Mobile/Streaming Analytics */}
-        <section className="bg-white/5 p-6 rounded-2xl border border-white/10">
+        <section className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-stroke dark:border-white/10">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
             <Smartphone className="text-teal-300" /> Streaming Plays (Coming Soon)
           </h2>

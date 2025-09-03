@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply font-satoshi font-normal text-base text-body bg-whiten dark:text-bodydark dark:bg-boxdark-2 relative z-1;
+    @apply font-satoshi font-normal text-base text-body bg-whiten relative z-1;
   }
 }
 
@@ -12,7 +12,14 @@
 }
 
 @layer utilities {
-  /* Light-mode readability overrides for legacy dark-only classes */
+  /* Dark-mode hardening: neutralize bright light-only surfaces in dark */
+  body.dark .bg-white { background-color: #1f2937 !important; } /* slate-800 */
+  body.dark .bg-gray-50 { background-color: #1f2937 !important; }
+  body.dark .bg-gray-100 { background-color: #1f2937 !important; }
+  body.dark .bg-whiten, body.dark .bg-whiter { background-color: #0b1220 !important; } /* dark surface */
+  body.dark .text-black { color: #ffffff !important; }
+  body.dark .border-stroke { border-color: #2E3A47 !important; } /* strokedark */
+  /* Light-mode fixes: improve readability of dark-oriented classes without touching dark mode */
   body:not(.dark) .text-white { color: #0f172a !important; }
   body:not(.dark) .text-white\/90 { color: rgba(15, 23, 42, 0.9) !important; }
   body:not(.dark) .text-white\/80 { color: rgba(15, 23, 42, 0.8) !important; }
@@ -20,16 +27,26 @@
   body:not(.dark) .text-white\/60 { color: rgba(15, 23, 42, 0.6) !important; }
   body:not(.dark) .text-white\/50 { color: rgba(15, 23, 42, 0.5) !important; }
   body:not(.dark) .text-white\/40 { color: rgba(15, 23, 42, 0.4) !important; }
+  /* Custom gray token used as text color in dark UIs */
   body:not(.dark) .text-gray { color: #64748b !important; }
 
-  /* Placeholder fixes where white placeholder is used on white bg */
+  /* Panels that rely on translucent white in dark mode → subtle gray in light mode */
+  body:not(.dark) .bg-white\/5  { background-color: rgba(0, 0, 0, 0.025) !important; }
+  body:not(.dark) .bg-white\/10 { background-color: rgba(0, 0, 0, 0.05) !important; }
+  body:not(.dark) .bg-white\/20 { background-color: rgba(0, 0, 0, 0.08) !important; }
+  /* Solid dark-panels swapped to light surfaces when not in dark mode */
+  body:not(.dark) .bg-boxdark, body:not(.dark) .bg-boxdark-2 { background-color: #ffffff !important; }
+  body:not(.dark) .bg-graydark { background-color: #F8FAFC !important; }
+
+  /* Borders that were white and disappear on white backgrounds */
+  body:not(.dark) .border-white\/10 { border-color: #E2E8F0 !important; }
+  body:not(.dark) .border-white\/20 { border-color: #E2E8F0 !important; }
+  body:not(.dark) .border-white\/30 { border-color: #E2E8F0 !important; }
+
+  /* Placeholders designed for dark inputs */
   body:not(.dark) .placeholder-white\/40::placeholder { color: #94a3b8 !important; }
   body:not(.dark) .placeholder-white\/50::placeholder { color: #94a3b8 !important; }
   body:not(.dark) .placeholder-white\/60::placeholder { color: #64748b !important; }
-
-  /* Border visibility where white borders were used */
-  body:not(.dark) .border-white\/10 { border-color: #E2E8F0 !important; }
-  body:not(.dark) .border-white\/20 { border-color: #E2E8F0 !important; }
 
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

@@ -58,9 +58,9 @@ const ArtistTracksView = () => {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
+    <div className="min-h-screen bg-whiten text-black dark:bg-slate-950 dark:text-white px-6 py-10">
       {/* Header */}
-      <header className="bg-black/20 backdrop-blur-md border-b border-white/10">
+      <header className="bg-transparent">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">

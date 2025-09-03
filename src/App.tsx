@@ -5,6 +5,7 @@ import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 
 import DefaultLayout from './layout/DefaultLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 import SignUp from './pages/Authentication/SignUp';
 
 import ZamIOLandingPage from './pages/Landing/LandingPage';
@@ -34,6 +35,7 @@ import CompleteProfile from './pages/Authentication/Onboarding/CompleteProfile';
 import SocialMediaInfo from './pages/Authentication/Onboarding/SocialMediaInfo';
 import PaymentInfo from './pages/Authentication/Onboarding/PaymentInfo';
 import Publisher from './pages/Authentication/Onboarding/Publisher';
+import api from './lib/api';
 
 const hiddenOnRoutes = [
   '/',
@@ -62,6 +64,26 @@ function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
+  // Bootstrap session: validate token and hydrate artist_id on load
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (!token) return;
+    // If artist_id is missing, fetch profile
+    const currentArtist = localStorage.getItem('artist_id');
+    if (currentArtist) return;
+    api
+      .get('api/profile/me')
+      .then((res) => {
+        const me = res.data;
+        if (me?.artist_id) {
+          localStorage.setItem('artist_id', me.artist_id);
+        }
+      })
+      .catch(() => {
+        // 401 is handled globally; ignore here
+      });
+  }, []);
+
   // Determine if the current route should skip the layout
   const shouldUseDefaultLayout = !hiddenOnRoutes.includes(location.pathname);
 
@@ -70,6 +92,8 @@ function App() {
   ) : shouldUseDefaultLayout ? (
     <DefaultLayout hiddenOnRoutes={hiddenOnRoutes}>
       <Routes>
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>
         <Route
           path="/dashboard"
           element={
@@ -229,6 +253,7 @@ function App() {
             </>
           }
         />
+        </Route>
       </Routes>
     </DefaultLayout>
   ) : (

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Activity, Eye, Logs, Search } from 'lucide-react';
-import { artistID, baseUrl, userToken } from '../../constants';
+import { baseUrl, userToken } from '../../constants';
+import { getArtistId } from '../../lib/auth';
 
 const MatchLogViewer = () => {
   const [activeTab, setActiveTab] = useState('playlogs');
@@ -29,7 +30,7 @@ const MatchLogViewer = () => {
       const response = await fetch(
         `${baseUrl}api/artists/playlogs/?search=${encodeURIComponent(
           search,
-        )}&artist_id=${artistID}&page=${currentPage}&log_page_state=${logPageState}`,
+        )}&artist_id=${getArtistId()}&page=${currentPage}&log_page_state=${logPageState}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -96,7 +97,7 @@ const MatchLogViewer = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br">
       {/* Header */}
-      <header className="bg-black/20 backdrop-blur-md border-b border-white/10">
+      <header className="bg-transparent">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">

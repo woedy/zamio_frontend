@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Music2Icon, UploadCloud, FileMusic } from 'lucide-react';
-import { artistID, baseUrl, userToken } from '../../constants';
+import { baseUrl, userToken } from '../../constants';
 import ButtonLoader from '../../common/button_loader';
 import { useLocation, useNavigate } from 'react-router-dom';
 

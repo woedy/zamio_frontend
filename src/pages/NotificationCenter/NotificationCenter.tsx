@@ -8,7 +8,8 @@ import {
   Clock,
   ChevronRight,
 } from 'lucide-react';
-import { artistID, baseUrl, userToken } from '../../constants';
+import { baseUrl, userToken } from '../../constants';
+import { getArtistId } from '../../lib/auth';
 
 const notificationssss = [
   {
@@ -54,7 +55,7 @@ const NotificationCenter = () => {
         `${baseUrl}api/notifications/get-all-artist-notifications/?search=${encodeURIComponent(
           search,
         )}&artist_id=${encodeURIComponent(
-          artistID,
+          getArtistId(),
         )}&order_by=${encodeURIComponent(orderNotifications)}&page=${page}`,
         {
           headers: {

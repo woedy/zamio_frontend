@@ -14,7 +14,8 @@ import {
   Logs,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { artistID, baseUrl, baseUrlMedia, userToken } from '../../constants';
+import { baseUrl, baseUrlMedia, userToken } from '../../constants';
+import { getArtistId } from '../../lib/auth';
 import Pagination from '../../components/Pagination';
 
 const ArtistTracksView = () => {
@@ -53,7 +54,7 @@ const ArtistTracksView = () => {
         `${baseUrl}api/artists/get-all-tracks/?search=${encodeURIComponent(
           search,
         )}&artist_id=${encodeURIComponent(
-          artistID,
+          getArtistId(),
         )}&order_by=${encodeURIComponent(orderSongs)}&page=${page}`,
         {
           headers: {
@@ -85,9 +86,9 @@ const ArtistTracksView = () => {
   }, [fetchData]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
+    <div className="min-h-screen bg-whiten text-black dark:bg-slate-950 dark:text-white px-6 py-10">
       {/* Header */}
-      <header className="bg-black/20 backdrop-blur-md border-b border-white/10">
+      <header className="bg-transparent">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -127,7 +128,7 @@ const ArtistTracksView = () => {
             </Link>
             <select
               onChange={(e) => setFilter(e.target.value)}
-              className="bg-slate-800 text-white border border-white/10 rounded px-3 py-1 text-sm"
+              className="rounded px-3 py-1 text-sm bg-gray-100 text-slate-800 border border-stroke dark:bg-slate-800 dark:text-white dark:border-white/10"
             >
               <option value="all">All</option>
               <option value="approved">Approved</option>
@@ -135,7 +136,7 @@ const ArtistTracksView = () => {
             </select>
             <button
               className={`p-2 rounded-md ${
-                view === 'table' ? 'bg-indigo-600' : 'bg-slate-800'
+                view === 'table' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-slate-800 dark:bg-slate-800 dark:text-white'
               }`}
               onClick={() => setView('table')}
             >
@@ -143,7 +144,7 @@ const ArtistTracksView = () => {
             </button>
             <button
               className={`p-2 rounded-md ${
-                view === 'grid' ? 'bg-indigo-600' : 'bg-slate-800'
+                view === 'grid' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-slate-800 dark:bg-slate-800 dark:text-white'
               }`}
               onClick={() => setView('grid')}
             >
@@ -154,8 +155,8 @@ const ArtistTracksView = () => {
 
         {view === 'table' ? (
           <div className="overflow-x-auto rounded-lg border border-white/10">
-            <table className="min-w-full text-sm text-white bg-white/5">
-              <thead className="bg-slate-800 text-left">
+            <table className="min-w-full text-sm bg-white dark:bg-slate-800">
+              <thead className="text-left bg-gray-100 text-slate-700 dark:bg-slate-800 dark:text-white/80">
                 <tr>
                   <th className="p-3">Title</th>
                   <th className="p-3">Duration</th>
@@ -211,7 +212,7 @@ const ArtistTracksView = () => {
               <Link to="/track-details" state={{ track_id: track?.track_id }}>
                 <div
                   key={track.track_id}
-                  className="bg-white/5 p-4 rounded-lg border border-white/10"
+                  className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-stroke dark:border-white/10"
                 >
                   <img
                     src={`${baseUrlMedia}${track?.cover_art}`}

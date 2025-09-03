@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../constants';
+import api from '../../lib/api';
 import ButtonLoader from '../../common/button_loader';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
@@ -87,34 +88,23 @@ const SignUp = () => {
     formData.append('stage_name', stageName);
 
     // Make a POST request to the server
-    const url = baseUrl + 'api/accounts/register-artist/';
+    const url = 'api/accounts/register-artist/';
 
     try {
       setLoading(true);
-      const response = await fetch(url, {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Display the first error message from the errors object
-        if (data.errors) {
-          const errorMessages = Object.values(data.errors).flat();
-          setInputError(errorMessages.join('\n'));
-        } else {
-          setInputError(data.message || 'Failed to register');
-        }
-        return; // Prevent further code execution
+      const response = await api.post(url, formData);
+      if (response.status >= 200 && response.status < 300) {
+        console.log('User registered successfully');
+        navigate('/verify-email', { state: { email } });
       }
-
-      // Registration successful
-      console.log('User registered successfully');
-      navigate('/verify-email', { state: { email } });
-    } catch (error) {
-      console.error('Error registering user:', error.message);
-      setInputError('Failed to register');
+    } catch (error: any) {
+      const data = error?.response?.data;
+      if (data?.errors) {
+        const errorMessages = Object.values(data.errors).flat() as string[];
+        setInputError(errorMessages.join('\n'));
+      } else {
+        setInputError(data?.message || 'Failed to register');
+      }
     } finally {
       setLoading(false);
     }

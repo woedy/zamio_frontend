@@ -7,6 +7,13 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',  // allow access from external IPs
     port: 4173,  // make sure the port matches
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 })
 

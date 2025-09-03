@@ -1,14 +1,7 @@
-import {
-  Wallet,
-  ArrowDownToLine,
-  Info,
-  Banknote,
-  BarChart3,
-  CalendarCheck,
-} from 'lucide-react';
+import { Wallet, ArrowDownToLine, Info, BarChart3, CalendarCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { artistID, baseUrl, userToken } from '../../constants';
-import { Clock, Calendar, Plus, MapPin } from 'lucide-react';
+import { getArtistId } from '../../lib/auth';
+import api from '../../lib/api';
 import {
   XAxis,
   YAxis,
@@ -19,26 +12,35 @@ import {
   Area,
 } from 'recharts';
 
-const wallet22 = {
-  total: 845.5,
-  sources: {
-    radio: 460.0,
-    streaming: 255.5,
-    distro: 130.0,
-  },
-  royaltyRates: {
-    radio: 'GHS 1.20 per spin',
-    streaming: 'GHS 0.005 per stream',
-  },
-  history: [
-    { date: '2025-06-30', amount: 300, method: 'MTN MoMo', status: 'Paid' },
-    { date: '2025-05-28', amount: 450, method: 'MTN MoMo', status: 'Paid' },
-  ],
+type WalletSources = {
+  radio?: number;
+  streaming?: number;
+  distro?: number;
+};
+
+type RoyaltyRates = {
+  radio?: string;
+  streaming?: string;
+};
+
+type WalletHistoryItem = {
+  date: string;
+  amount: number;
+  method: string;
+  status: string;
+};
+
+type WalletType = {
+  total?: number;
+  sources?: WalletSources;
+  royaltyRates?: RoyaltyRates;
+  history?: WalletHistoryItem[];
 };
 
 export default function RoyaltyDashboard() {
   const [loading, setLoading] = useState(false);
-  const [wallet, setWallet] = useState({});
+  const [error, setError] = useState<string | null>(null);
+  const [wallet, setWallet] = useState<WalletType | null>(null);
 
   const revenueData = [
     { month: 'Jan', revenue: 45000, artists: 320, stations: 15 },
@@ -53,25 +55,15 @@ export default function RoyaltyDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      setError(null);
       try {
-        const response = await fetch(
-          baseUrl + `api/bank-account/artist/payments/?artist_id=${artistID}`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Token ${userToken}`,
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        setWallet(data.data.wallet);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+        const { data } = await api.get('api/bank-account/artist/payments/', {
+          params: { artist_id: getArtistId() },
+        });
+        setWallet(data?.data?.wallet ?? null);
+      } catch (err: any) {
+        console.error('Error fetching data:', err);
+        setError('Failed to load payment data. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -83,6 +75,12 @@ export default function RoyaltyDashboard() {
   return (
     <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
       <div className="max-w-6xl mx-auto space-y-10">
+        {loading && (
+          <div className="bg-slate-800 text-white/80 px-4 py-2 rounded">Loading data…</div>
+        )}
+        {error && (
+          <div className="bg-red-600/20 text-red-300 px-4 py-2 rounded">{error}</div>
+        )}
         {/* Wallet Overview */}
         <div className="bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 p-6 rounded-lg shadow-md text-white">
           <h2 className="text-xl font-bold flex items-center gap-2">
@@ -95,7 +93,7 @@ export default function RoyaltyDashboard() {
             <div>
               📻 Radio:{' '}
               <span className="font-medium">
-                GHS {wallet?.sources?.stations?.toFixed(2)}
+                GHS {(wallet?.sources?.radio ?? 0).toFixed(2)}
               </span>
             </div>
             <div>

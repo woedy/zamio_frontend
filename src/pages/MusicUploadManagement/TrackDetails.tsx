@@ -203,7 +203,7 @@ const radioStations222 = [
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
+    <div className="min-h-screen bg-whiten text-black dark:bg-slate-950 dark:text-white px-6 py-10">
       <div className="max-w-6xl mx-auto space-y-10">
         {/* Header */}
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Music2Icon, UploadCloud, FileMusic, Plus } from 'lucide-react';
-import { artistID, baseUrl, userToken } from '../../constants';
+import { baseUrl, userToken } from '../../constants';
+import { getArtistId } from '../../lib/auth';
 import ButtonLoader from '../../common/button_loader';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -38,7 +39,7 @@ export default function UploadTrack() {
     try {
       const response = await fetch(
         `${baseUrl}api/artists/get-upload-track-support-data/?artist_id=${encodeURIComponent(
-          artistID,
+          getArtistId(),
         )}`,
         {
           headers: {
@@ -95,7 +96,7 @@ export default function UploadTrack() {
     }
 
     const formData = new FormData();
-    formData.append('artist_id', artistID);
+    formData.append('artist_id', getArtistId());
     formData.append('title', trackData.title);
     formData.append('album_id', album);
     formData.append('audio_file', trackData.audioFile);

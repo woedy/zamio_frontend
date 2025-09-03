@@ -23,7 +23,8 @@ import {
   ChevronUp,
   Verified,
 } from 'lucide-react';
-import { artistID, baseUrl, baseUrlMedia, userToken } from '../../constants';
+import { baseUrl, baseUrlMedia, userToken } from '../../constants';
+import { getArtistId } from '../../lib/auth';
 
 const ArtistProfilePage = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -205,7 +206,7 @@ const ArtistProfilePage = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          baseUrl + `api/artists/get-artist-profile/?artist_id=${artistID}`,
+          baseUrl + `api/artists/get-artist-profile/?artist_id=${getArtistId()}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -489,7 +490,7 @@ const ArtistProfilePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br">
       {/* Header */}
-      <header className="bg-black/20 backdrop-blur-md border-b border-white/10 sticky top-0 z-40">
+      <header className="bg-transparent sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
