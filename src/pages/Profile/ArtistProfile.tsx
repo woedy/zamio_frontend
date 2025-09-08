@@ -836,7 +836,7 @@ const ArtistProfilePage = () => {
 
           {/* Songs Tab */}
           {activeTab === 'songs' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {songs.map((song) => (
                 <SongCard
                   key={song.id}
@@ -1034,7 +1034,7 @@ const ArtistProfilePage = () => {
                 Publisher
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="p-4 bg-white/5 rounded-xl text-white space-y-2">
                   <div className="text-sm text-gray-300">Company</div>
                   <div className="text-lg font-semibold">{publisherInfo?.companyName || 'None'}</div>
@@ -1048,6 +1048,10 @@ const ArtistProfilePage = () => {
                   <div className="text-lg font-semibold">{publisherInfo?.writerSplit ?? 0}%</div>
                   <div className="text-sm text-gray-300">Publisher Split</div>
                   <div className="text-lg font-semibold">{publisherInfo?.publisherSplit ?? 0}%</div>
+                </div>
+                <div className="p-4 bg-white/5 rounded-xl text-white space-y-2">
+                  <div className="text-sm text-gray-300">Self-Published</div>
+                  <div className="text-lg font-semibold">{publisherInfo?.selfPublished ? "Yes" : "No"}</div>
                 </div>
               </div>
 
