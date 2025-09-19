@@ -1,5 +1,7 @@
 # ZamIO Artist Frontend Checklist
 
+See also: [TestPlanOrder.md](../TestPlanOrder.md) for the step-by-step visual smoke order.
+
 Purpose: track feature readiness for the artist-facing app. Check items off when built, wired to APIs, and verified in the UI.
 
 Legend: [ ] Planned  [~] In progress  [x] Done

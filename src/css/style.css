@@ -3,8 +3,25 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* CSS Custom Properties for dynamic theming */
+    --color-primary: #14002C;
+    --color-secondary: #80CAEE;
+    --color-background: #FFFFFF;
+    --color-surface: #F8FAFC;
+    --color-text: #1C2434;
+    --color-text-secondary: #64748B;
+    --color-border: #E2E8F0;
+    --color-error: #D34053;
+    --color-warning: #FFA70B;
+    --color-success: #219653;
+    --color-info: #259AE6;
+  }
+
   body {
-    @apply font-satoshi font-normal text-base text-body bg-whiten relative z-1;
+    @apply font-satoshi font-normal text-base relative z-1;
+    background-color: var(--color-background);
+    color: var(--color-text);
   }
 }
 

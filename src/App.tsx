@@ -35,6 +35,9 @@ import CompleteProfile from './pages/Authentication/Onboarding/CompleteProfile';
 import SocialMediaInfo from './pages/Authentication/Onboarding/SocialMediaInfo';
 import PaymentInfo from './pages/Authentication/Onboarding/PaymentInfo';
 import Publisher from './pages/Authentication/Onboarding/Publisher';
+import EnhancedArtistOnboarding from './pages/Authentication/Onboarding/EnhancedArtistOnboarding';
+import ComponentShowcase from './components/ComponentShowcase';
+import ComponentTest from './components/ComponentTest';
 import api from './lib/api';
 
 const hiddenOnRoutes = [
@@ -46,6 +49,7 @@ const hiddenOnRoutes = [
   '/onboarding/social-media',
   '/onboarding/payment',
   '/onboarding/publisher',
+  '/onboarding/enhanced',
   '/forgot-password',
   '/new-password-reset',
   '/confirm-password-otp',
@@ -250,6 +254,24 @@ function App() {
             <>
               <PageTitle title="Artist Page | ZamIO-Artists" />
               <ArtistProfilePage />
+            </>
+          }
+        />
+        <Route
+          path="/components"
+          element={
+            <>
+              <PageTitle title="Component Showcase | ZamIO-Artists" />
+              <ComponentShowcase />
+            </>
+          }
+        />
+        <Route
+          path="/test"
+          element={
+            <>
+              <PageTitle title="Component Test | ZamIO-Artists" />
+              <ComponentTest />
             </>
           }
         />

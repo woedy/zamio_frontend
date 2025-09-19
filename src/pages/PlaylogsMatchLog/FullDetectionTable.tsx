@@ -188,7 +188,17 @@ const MatchLogViewer = () => {
                       currentLogs.map((log) => (
                         <tr key={log.id}>
                           <td className="px-4 py-2 text-white">
-                            {log.track_title || log.song}
+                            <div className="flex items-center gap-2">
+                              <span>{log.track_title || log.song}</span>
+                              {log.attribution_source === 'Partner' && (
+                                <span
+                                  title={log.partner_name ? `Collected via ${log.partner_name} in Ghana` : 'Collected via Partner in Ghana'}
+                                  className="text-xs px-2 py-0.5 rounded-full bg-yellow-400/20 text-yellow-200 border border-yellow-400/40"
+                                >
+                                  {log.partner_name ? `Partner: ${log.partner_name}` : 'Partner'}
+                                </span>
+                              )}
+                            </div>
                           </td>
                           <td className="px-4 py-2">
                             {log.station_name || log.station}
